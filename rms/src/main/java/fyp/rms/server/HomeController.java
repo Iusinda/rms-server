@@ -38,6 +38,11 @@ public class HomeController {
 
 		return "home";
 	}
+	
+	@RequestMapping(value = "/ajaxDemo", method = RequestMethod.GET)
+	public String ajax() {
+		return "ajax";
+	}
 
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	@ResponseBody public TestObject test() {
