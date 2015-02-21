@@ -38,14 +38,25 @@ public class HomeController {
 
 		return "home";
 	}
-	
+
 	@RequestMapping(value = "/ajaxDemo", method = RequestMethod.GET)
 	public String ajax() {
 		return "ajax";
 	}
 
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
-	@ResponseBody public TestObject test() {
+	@RequestMapping(value = "/array", method = RequestMethod.GET)
+	@ResponseBody
+	public TestObject[] jsonArray() {
+		TestObject[] a = new TestObject[3];
+		a[0] = new TestObject();
+		a[1] = new TestObject();
+		a[2] = new TestObject();
+		return a;
+	}
+
+	@RequestMapping(value = "/json", method = RequestMethod.GET)
+	@ResponseBody
+	public TestObject test() {
 		return new TestObject();
 	}
 }
