@@ -1,22 +1,31 @@
 package fyp.rms.server.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Customer {
-	private int customerID;
-	private String regID;
 
-	public int getCustomerID() {
-		return customerID;
-	}
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private long id;
+    private String firstName;
+    private String lastName;
 
-	public void setCustomerID(int customerID) {
-		this.customerID = customerID;
-	}
+    protected Customer() {}
 
-	public String getRegID() {
-		return regID;
-	}
+    public Customer(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
-	public void setRegID(String regID) {
-		this.regID = regID;
-	}
+    @Override
+    public String toString() {
+        return String.format(
+                "Customer[id=%d, firstName='%s', lastName='%s']",
+                id, firstName, lastName);
+    }
+
 }

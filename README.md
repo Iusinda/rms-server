@@ -1,2 +1,1 @@
-# rms-server
-RMS - Server Application
+Example of Spring Data JPA application (Hibernate used as implementation of JPA).
