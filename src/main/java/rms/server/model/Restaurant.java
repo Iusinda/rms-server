@@ -1,6 +1,7 @@
 package rms.server.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import org.hibernate.mapping.Collection;
 
 @Entity
 public class Restaurant implements Serializable {
@@ -19,7 +19,7 @@ public class Restaurant implements Serializable {
 	
 	private String name;
 	
-	@ManyToOne(optional=false)
+	@ManyToOne
     @JoinColumn(name="districtId", referencedColumnName="id")
     private District district;
 	
@@ -32,7 +32,7 @@ public class Restaurant implements Serializable {
 	private String description;
 	
 	@OneToMany(mappedBy="restaurant", targetEntity=TicketType.class)
-	private Collection ticketTypes;
+	private List<TicketType> ticketTypes;
 	
 	private boolean status;
 }
