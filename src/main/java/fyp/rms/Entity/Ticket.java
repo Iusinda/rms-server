@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class Ticket {
 	private Integer customerId;
 	private Integer restaurantId;
-	private Character type;
+	private String type;
 	private Timestamp getTime;
 	private Timestamp callTime;
 	private Boolean status;
@@ -26,11 +26,11 @@ public class Ticket {
 		this.restaurantId = restaurantId;
 	}
 
-	public Character getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(Character type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 

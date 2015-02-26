@@ -2,7 +2,7 @@ package fyp.rms.Entity;
 
 public class TicketType {
 	private Integer restaurantId;
-	private Character type;
+	private String type;
 	private Integer maxSize;
 
 	public Integer getRestaurantId() {
@@ -13,11 +13,11 @@ public class TicketType {
 		this.restaurantId = restaurantId;
 	}
 
-	public Character getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(Character type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 
