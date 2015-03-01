@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd ">
+
+	<!-- Initialization for data source -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/TEST" />
+		<property name="username" value="system" />
+		<property name="password" value="Database123" />
+	</bean>
+
+	<!-- Definition for studentJDBCTemplate bean -->
+	<bean id="CustomerJDBCTemplate" class="fyp.rms.Dao.CustomerJDBCTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="DistrictJDBCTemplate" class="fyp.rms.Dao.DistrictJDBCTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="RestaurantJDBCTemplate" class="fyp.rms.Dao.RestaurantJDBCTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="TicketJDBCTemplate" class="fyp.rms.Dao.TicketJDBCTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="TicketTypeJDBCTemplate" class="fyp.rms.Dao.TicketTypeJDBCTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+</beans>
