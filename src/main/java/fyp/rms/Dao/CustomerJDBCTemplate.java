@@ -23,7 +23,7 @@ public class CustomerJDBCTemplate implements CustomerDao {
 	@Override
 	public void create(String regId) {
 		// TODO Auto-generated method stub
-		String SQL = "INSERT INTO rms.Customer (RegID) VALUES (?)";
+		String SQL = "INSERT INTO rms.Customers (RegID) VALUES (?)";
 		jdbcTemplateObject.update(SQL, regId);
 		// do some log or other things
 
@@ -32,7 +32,7 @@ public class CustomerJDBCTemplate implements CustomerDao {
 	@Override
 	public Customer getCustomer(Integer id) {
 		// TODO Auto-generated method stub\
-		String SQL = "SELECT * FROM rms.Customer WHERE CustomerID = ?";
+		String SQL = "SELECT * FROM rms.Customers WHERE ID = ?";
 		Customer customer = jdbcTemplateObject.queryForObject(SQL,
 				new Object[] { id }, new CustomerMapper());
 		return customer;
@@ -41,7 +41,7 @@ public class CustomerJDBCTemplate implements CustomerDao {
 	@Override
 	public List<Customer> listCustomers() {
 		// TODO Auto-generated method stub
-		String SQL = "SELECT * FROM rms.Customer";
+		String SQL = "SELECT * FROM rms.Customers";
 		List<Customer> customer = jdbcTemplateObject.query(SQL,
 				new CustomerMapper());
 		return customer;
@@ -50,7 +50,7 @@ public class CustomerJDBCTemplate implements CustomerDao {
 	@Override
 	public void delete(Integer id) {
 		// TODO Auto-generated method stub
-		String SQL = "DELETE FROM rms.Customer WHERE CustomerID = ?";
+		String SQL = "DELETE FROM rms.Customers WHERE ID = ?";
 		jdbcTemplateObject.update(SQL, id);
 		// do some log or other things
 	}
@@ -58,9 +58,10 @@ public class CustomerJDBCTemplate implements CustomerDao {
 	@Override
 	public void update(Integer id, String regId) {
 		// TODO Auto-generated method stub
-		String SQL = "UPUDATE rms.Customer SET RegID = ? WHERE CustomerID = ?";
+		String SQL = "UPUDATE rms.Customers SET RegID = ? WHERE ID = ?";
 		jdbcTemplateObject.update(SQL, new Object[] { id, regId });
 		// log and do somethings
 	}
-
+	
+ 
 }

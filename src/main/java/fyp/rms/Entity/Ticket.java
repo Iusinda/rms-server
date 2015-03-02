@@ -8,7 +8,8 @@ public class Ticket {
 	private String type;
 	private Timestamp getTime;
 	private Timestamp callTime;
-	private Boolean status;
+	private Boolean validity;
+	private Integer size;
 
 	public Integer getCustomerId() {
 		return customerId;
@@ -50,12 +51,20 @@ public class Ticket {
 		this.callTime = callTime;
 	}
 
-	public Boolean getStatus() {
-		return status;
+	public Boolean getValidity() {
+		return validity;
 	}
 
-	public void setStatus(Boolean status) {
-		this.status = status;
+	public void setValidity(Boolean validity) {
+		this.validity = validity;
+	}
+
+	public Integer getSize() {
+		return size;
+	}
+
+	public void setSize(Integer size) {
+		this.size = size;
 	}
 
 }

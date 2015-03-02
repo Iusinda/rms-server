@@ -23,7 +23,7 @@ public class TicketTypeJDBCTemplate implements TicketTypeDao {
 	@Override
 	public void create(Integer restaurantId, Character type, Integer maxSize) {
 		// TODO Auto-generated method stub
-		String SQL = "INSERT INTO rms.TicketType "
+		String SQL = "INSERT INTO rms.TicketTypes "
 				+ "(RestaurantID,Type,MaxSize)" + " VALUES (?,?,?)";
 		jdbcTemplateObject.update(SQL, new Object[] { restaurantId, type,
 				maxSize });
@@ -32,7 +32,7 @@ public class TicketTypeJDBCTemplate implements TicketTypeDao {
 	@Override
 	public TicketType getTicketType(Integer restaurantId, Character type) {
 		// TODO Auto-generated method stub
-		String SQL = "SELECT * FROM rms.TicketType WHERE RestaurantID = ? AND Type = ?";
+		String SQL = "SELECT * FROM rms.TicketTypes WHERE RestaurantID = ? AND Type = ?";
 		TicketType ticketType = jdbcTemplateObject.queryForObject(SQL,
 				new Object[] { restaurantId, type }, new TicketTypeMapper());
 		return ticketType;
@@ -41,7 +41,7 @@ public class TicketTypeJDBCTemplate implements TicketTypeDao {
 	@Override
 	public List<TicketType> listTicketTypes() {
 		// TODO Auto-generated method stub
-		String SQL = "SELECT * FROM rms.TicketType";
+		String SQL = "SELECT * FROM rms.TicketTypes";
 		List<TicketType> ticketType = jdbcTemplateObject.query(SQL,
 				new TicketTypeMapper());
 		return ticketType;
@@ -50,14 +50,14 @@ public class TicketTypeJDBCTemplate implements TicketTypeDao {
 	@Override
 	public void delete(Integer restaurantId, Character type) {
 		// TODO Auto-generated method stub
-		String SQL = "DELETE FROM rms.TicketType WHERE RestaurantId = ?,Type = ?";
+		String SQL = "DELETE FROM rms.TicketTypes WHERE RestaurantId = ?,Type = ?";
 		jdbcTemplateObject.update(SQL, new Object[] { restaurantId, type });
 	}
 
 	@Override
 	public void update(Integer restaurantId, Character type, Integer maxSize) {
 		// TODO Auto-generated method stub
-		String SQL = "UPDATE rms.TicketType" + "SET maxSize = ?"
+		String SQL = "UPDATE rms.TicketTypes" + "SET maxSize = ?"
 				+ "WHERE RestaurantId = ? AND Type = ?";
 		jdbcTemplateObject.update(SQL, new Object[] { maxSize, restaurantId,
 				type });

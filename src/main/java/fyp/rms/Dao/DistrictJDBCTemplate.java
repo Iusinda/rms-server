@@ -21,11 +21,11 @@ public class DistrictJDBCTemplate implements DistrictDao {
 	}
 
 	@Override
-	public void create(String name) {
+	public void create(String name, Integer areaId) {
 		// TODO Auto-generated method stub
-		String SQL = "INSERT INTO rms.District (Name) VALUES ('?')";
-		jdbcTemplateObject.update(SQL, name);
-	} 
+		String SQL = "INSERT INTO rms.District (Name,AreaId) VALUES ('?,?')";
+		jdbcTemplateObject.update(SQL, name, areaId);
+	}
 
 	@Override
 	public District getDistrict(Integer id) {
@@ -54,10 +54,19 @@ public class DistrictJDBCTemplate implements DistrictDao {
 	}
 
 	@Override
-	public void update(Integer id, String name) {
+	public void update(Integer id, String name, Integer areaId) {
 		// TODO Auto-generated method stub
-		String SQL = "UPUDATE rms.District SET Name = ? WHERE DistrictID = ?";
-		jdbcTemplateObject.update(SQL, new Object[] { id, name });
+		String SQL = "UPUDATE rms.District SET Name = ?,AreaId = ? WHERE DistrictID = ?";
+		jdbcTemplateObject.update(SQL, new Object[] { name, areaId, id });
+	}
+
+	@Override
+	public District getDistrictByAreaId(Integer areaId) {
+		String SQL = "SELECT * FROM rms.Districts WHERE AreaID = ?";
+		District district = jdbcTemplateObject.queryForObject(SQL,
+				new Object[] { areaId }, new DistrictMapper());
+		return district;
+
 	}
 
 }

@@ -1,18 +1,8 @@
 package fyp.rms.Entity;
 
-public class District {
-	// id is auto-generated value
+public class Area {
 	private Integer id;
 	private String name;
-	private Integer areaId;
-
-	public Integer getAreaId() {
-		return areaId;
-	}
-
-	public void setAreaId(Integer areaId) {
-		this.areaId = areaId;
-	}
 
 	public Integer getId() {
 		return id;

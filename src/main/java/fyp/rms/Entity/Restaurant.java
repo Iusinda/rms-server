@@ -1,15 +1,17 @@
 package fyp.rms.Entity;
 
+import java.sql.Date;
+
 public class Restaurant {
 	private Integer id;
 	private Integer districtId;
-	private String password;
 	private String name;
 	private String address;
 	private String phoneNo;
 	private String openingHours;
 	private String description;
-	private Boolean status;
+	private Boolean availability;
+	private Date lastUpdate;
 
 	public Integer getId() {
 		return id;
@@ -17,14 +19,6 @@ public class Restaurant {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public String getName() {
@@ -75,12 +69,20 @@ public class Restaurant {
 		this.description = description;
 	}
 
-	public Boolean getStatus() {
-		return status;
+	public Boolean getAvailability() {
+		return availability;
 	}
 
-	public void setStatus(Boolean status) {
-		this.status = status;
+	public void setAvailability(Boolean availability) {
+		this.availability = availability;
+	}
+
+	public Date getLastUpdate() {
+		return lastUpdate;
+	}
+
+	public void setLastUpdate(Date lastUpdate) {
+		this.lastUpdate = lastUpdate;
 	}
 
 }

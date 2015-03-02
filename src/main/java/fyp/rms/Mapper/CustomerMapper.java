@@ -10,7 +10,7 @@ import fyp.rms.Entity.Customer;
 public class CustomerMapper implements RowMapper<Customer> {
 	public Customer mapRow(ResultSet rs, int rowNum) throws SQLException {
 		Customer customer = new Customer();
-		customer.setId(rs.getInt("CustomerID"));
+		customer.setId(rs.getInt("ID"));
 		customer.setRegId(rs.getString("RegID"));
 		return customer;
 	}

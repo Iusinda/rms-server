@@ -26,7 +26,7 @@ public class TicketJDBCTemplate implements TicketDao {
 			Character type, Timestamp getTime, Timestamp callTime,
 			Boolean status) {
 		// TODO Auto-generated method stub
-		String SQL = "INSERT INTO rms.Ticket "
+		String SQL = "INSERT INTO rms.Tickets "
 				+ "(CustomerID,RestaurantID,Type,GetTime,CallTime,Status)"
 				+ " VALUES (?,?,?,?,?,?)";
 		jdbcTemplateObject.update(SQL, new Object[] { customerId, restaurantId,
@@ -38,7 +38,7 @@ public class TicketJDBCTemplate implements TicketDao {
 	public Ticket getTicket(Integer customerId, Integer restaurantId,
 			Character type, Timestamp getTime) {
 		// TODO Auto-generated method stub
-		String SQL = "SELECT * FROM rms.Ticket"
+		String SQL = "SELECT * FROM rms.Tickets"
 				+ " WHERE CustomerID = ? AND RestaurantID = ? AND Type = ? AND GetTime = ?";
 		Ticket ticket = jdbcTemplateObject.queryForObject(SQL, new Object[] {
 				customerId, restaurantId, type, getTime }, new TicketMapper());
@@ -48,7 +48,7 @@ public class TicketJDBCTemplate implements TicketDao {
 	@Override
 	public List<Ticket> listTickets() {
 		// TODO Auto-generated method stub
-		String SQL = "SELECT * FROM rms.Ticket";
+		String SQL = "SELECT * FROM rms.Tickets";
 		List<Ticket> ticket = jdbcTemplateObject.query(SQL, new TicketMapper());
 		return ticket;
 	}
@@ -57,7 +57,7 @@ public class TicketJDBCTemplate implements TicketDao {
 	public void delete(Integer customerId, Integer restaurantId,
 			Character type, Timestamp getTime) {
 		// TODO Auto-generated method stub
-		String SQL = "DELETE FROM rms.Ticket "
+		String SQL = "DELETE FROM rms.Tickets "
 				+ "WHERE CustomerID = ?, RestaurantID = ?,Type = ?,GetTime = ?";
 		jdbcTemplateObject.update(SQL, new Object[] { customerId, restaurantId,
 				type, getTime });
@@ -68,7 +68,7 @@ public class TicketJDBCTemplate implements TicketDao {
 			Character type, Timestamp getTime, Timestamp callTime,
 			Boolean status) {
 		// TODO Auto-generated method stub
-		String SQL = "UPDATE rms.Ticket "
+		String SQL = "UPDATE rms.Tickets "
 				+ "SET CallTime = ?, Status = ? "
 				+ "WHERE  CustomerID = ?, RestaurantID = ?,Type = ?,GetTime = ?";
 		jdbcTemplateObject.update(SQL, new Object[] { callTime, status,

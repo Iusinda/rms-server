@@ -22,4 +22,5 @@ public interface CustomerDao {
 	public void delete(Integer id);
 
 	public void update(Integer id, String regId);
+	
 }

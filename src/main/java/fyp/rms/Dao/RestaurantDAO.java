@@ -21,9 +21,9 @@ import fyp.rms.Entity.Restaurant;
 public interface RestaurantDAO {
 	public void setDataSource(DataSource ds);
 
-	public void create(Integer districtId, String password, String name,
-			String address, String phoneNo, String openingHours,
-			String description, Boolean status);
+	public void create(Integer districtId, String name, String address,
+			String phoneNo, String openingHours, String description,
+			Boolean availability);
 
 	public Restaurant getRestaurant(Integer id);
 
@@ -31,7 +31,7 @@ public interface RestaurantDAO {
 
 	public void delete(Integer id);
 
-	public void update(Integer id, Integer districtId, String password,
-			String name, String address, String phoneNo, String openingHours,
-			String description, Boolean status);
+	public void update(Integer id, Integer districtId, String name,
+			String address, String phoneNo, String openingHours,
+			String description, Boolean availability);
 }

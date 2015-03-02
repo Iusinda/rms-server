@@ -1,30 +1,31 @@
 --Customer
 
 --C first-time use
-INSERT INTO rms.Customers (RegID) VALUES ('?');
+INSERT INTO rms.Customers (RegID) VALUES ('?');--done
 SELECT LAST_INSERT_ID();
 
 --S call customer
-SELECT RegID FROM rms.Customers WHERE ID = ?;
+SELECT RegID FROM rms.Customers WHERE ID = ?; --done
 
 ----------
 
 --Area
 
 --C list areas
-SELECT * FROM rms.Areas;#
+SELECT * FROM rms.Areas; --done
 
+----------
 --District
 
 --C list districts
-SELECT ID, Name FROM rms.Districts WHERE AreaID = ?;
+SELECT ID, Name FROM rms.Districts WHERE AreaID = ?; --done
 
 ----------
 
 --Restaurant
 
 --C list restaurants
-SELECT ID, Name FROM rms.Restaurants WHERE Availability = TRUE;
+SELECT ID, Name FROM rms.Restaurants WHERE Availability = TRUE;--done
 
 --C search and/or filter restaurants
 --filter nothing

@@ -14,10 +14,11 @@ public class TicketMapper implements RowMapper<Ticket> {
 		ticket.setCustomerId(rs.getInt("CustomerID"));
 		ticket.setGetTime(rs.getTimestamp("GetTime"));
 		ticket.setRestaurantId(rs.getInt("RestaurantID"));
-		ticket.setStatus(rs.getBoolean("Status"));
+		ticket.setValidity(rs.getBoolean("Validity"));
 		ticket.setType(rs.getString("Type"));
+		ticket.setSize(rs.getInt("Size"));
 		return ticket;
-		
+
 	}
 
 }
