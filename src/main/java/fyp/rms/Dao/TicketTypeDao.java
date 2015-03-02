@@ -17,12 +17,11 @@ public interface TicketTypeDao {
 
 	public void create(Integer restaurantId, Character type, Integer maxSize);
 
-	public TicketType getTicketType(Integer restaurantId, Character type,
-			Integer maxSize);
+	public TicketType getTicketType(Integer restaurantId, Character type);
 
 	public List<TicketType> listTicketTypes();
 
-	public void delete(Integer restaurantId, Character type, Integer maxSize);
+	public void delete(Integer restaurantId, Character type);
 
 	public void update(Integer restaurantId, Character type, Integer maxSize);
 }
