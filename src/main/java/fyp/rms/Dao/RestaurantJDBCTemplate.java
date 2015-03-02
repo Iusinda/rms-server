@@ -35,7 +35,7 @@ public class RestaurantJDBCTemplate implements RestaurantDAO {
 	@Override
 	public Restaurant getRestaurant(Integer id) {
 		// TODO Auto-generated method stub
-		String SQL = "SELECT * FROM rms.Restaurants WHERE RestaurantID = ?;";
+		String SQL = "SELECT * FROM rms.Restaurants WHERE ID = ?;";
 		Restaurant restaurant = jdbcTemplateObject.queryForObject(SQL,
 				new Object[] { id }, new RestaurantMapper());
 		return restaurant;
@@ -53,7 +53,7 @@ public class RestaurantJDBCTemplate implements RestaurantDAO {
 	@Override
 	public void delete(Integer id) {
 		// TODO Auto-generated method stub
-		String SQL = "DELETE FROM rms.Restaurants WHERE RestaurantID= ?";
+		String SQL = "DELETE FROM rms.Restaurants WHERE ID= ?";
 		jdbcTemplateObject.update(SQL, id);
 		// do log or something
 	}
@@ -69,5 +69,33 @@ public class RestaurantJDBCTemplate implements RestaurantDAO {
 		jdbcTemplateObject
 				.update(SQL, new Object[] { districtId, name, address, phoneNo,
 						openingHours, description, availability, id });
+	}
+
+	@Override
+	public Restaurant findRestaurant1(String name) {
+		// TODO Auto-generated method stub
+		String SQL = "SELECT * FROM rms.Restaurants WHERE Availability = TRUE AND Name LIKE '%?%'";
+		Restaurant restaurant = jdbcTemplateObject.queryForObject(SQL,
+				new Object[] { name }, new RestaurantMapper());
+		return restaurant;
+
+	}
+
+	@Override
+	public Restaurant findRestaurant2(String name, Integer areaId) {
+		// TODO Auto-generated method stub
+		String SQL = "SELECT * FROM rms.Restaurants WHERE Availability = TRUE AND DistrictID IN (SELECT ID FROM rms.Districts WHERE AreaID = ?) AND Name LIKE '%?%'";
+		Restaurant restaurant = jdbcTemplateObject.queryForObject(SQL,
+				new Object[] { areaId, name }, new RestaurantMapper());
+		return restaurant;
+	}
+
+	@Override
+	public Restaurant findRestaurant3(Integer districtId, String name) {
+		// TODO Auto-generated method stub
+		String SQL = "SELECT ID, Name FROM rms.Restaurants WHERE Availability = TRUE AND DistrictID = ? AND Name LIKE '%?%';";
+		Restaurant restaurant = jdbcTemplateObject.queryForObject(SQL,
+				new Object[] { districtId, name }, new RestaurantMapper());
+		return restaurant;
 	}
 }

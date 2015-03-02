@@ -27,6 +27,12 @@ public interface RestaurantDAO {
 
 	public Restaurant getRestaurant(Integer id);
 
+	public Restaurant findRestaurant1(String name);
+
+	public Restaurant findRestaurant2(String name, Integer areaId);
+
+	public Restaurant findRestaurant3(Integer districtId, String name);
+
 	public List<Restaurant> listRestaurants();
 
 	public void delete(Integer id);
