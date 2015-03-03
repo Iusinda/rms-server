@@ -2,6 +2,7 @@ package fyp.rms.Dao;
 
 import java.util.List;
 
+
 /*
  private Integer restaurantId;
  private Character type;
@@ -15,13 +16,13 @@ public interface TicketTypeDao {
 
 	public void setDataSource(DataSource ds);
 
-	public void create(Integer restaurantId, Character type, Integer maxSize);
+	public void createTicketType(Integer restaurantId, Character type, Integer maxSize);
 
-	public TicketType getTicketType(Integer restaurantId, Character type);
+	public TicketType findTicketType(Integer restaurantId, Character type);
 
-	public List<TicketType> listTicketTypes();
+	public List<TicketType> findTicketTypes(Integer restaurantId);
 
-	public void delete(Integer restaurantId, Character type);
+	public void updateTicketType(Integer restaurantId, Character type, Integer maxSize);
 
-	public void update(Integer restaurantId, Character type, Integer maxSize);
+	public void deleteTicketType(Integer restaurantId, Character type);
 }

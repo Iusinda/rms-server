@@ -21,23 +21,31 @@ import fyp.rms.Entity.Restaurant;
 public interface RestaurantDAO {
 	public void setDataSource(DataSource ds);
 
-	public void create(Integer districtId, String name, String address,
-			String phoneNo, String openingHours, String description,
-			Boolean availability);
-
-	public Restaurant getRestaurant(Integer id);
-
-	public Restaurant findRestaurant1(String name);
-
-	public Restaurant findRestaurant2(String name, Integer areaId);
-
-	public Restaurant findRestaurant3(Integer districtId, String name);
-
-	public List<Restaurant> listRestaurants();
-
-	public void delete(Integer id);
-
-	public void update(Integer id, Integer districtId, String name,
+	public int createRestaurant(String name, Integer districtId,
 			String address, String phoneNo, String openingHours,
 			String description, Boolean availability);
+
+	public Restaurant findRestaurant(Integer id);
+
+	public List<Restaurant> findRestaurants(String name);
+
+	public List<Restaurant> findRestaurantsByDistrictId(Integer districtId,
+			String name);
+
+	public List<Restaurant> findRestaurantsByAreaId(Integer areaId, String name);
+
+	public List<Restaurant> findAllRestaurants();
+
+	public boolean getValidation(Integer id, String password);
+
+	public void updateRestaurant(Integer id, Integer districtId, String name,
+			String address, String phoneNo, String openingHours,
+			String description, Boolean availability);
+
+	public boolean updateAvailability(Integer id, boolean available);
+
+	public boolean updatePassword(Integer id, String oldPassword,
+			String newPassword);
+
+	public void deleteRestaurant(Integer id);
 }

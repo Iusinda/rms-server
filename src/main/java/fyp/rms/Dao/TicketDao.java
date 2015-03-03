@@ -19,19 +19,28 @@ public interface TicketDao {
 
 	public void setDataSource(DataSource ds);
 
-	public void create(Integer customerId, Integer restaurantId,
-			Character type, Timestamp getTime, Timestamp callTime,
-			Boolean status);
+	public void createTicket(Integer restaurantId, Character type,
+			Integer size, Integer customerId);
 
-	public Ticket getTicket(Integer customerId, Integer restaurantId,
-			Character type, Timestamp getTime);
+	public void createTicket(Integer restaurantId, Character type, Integer size);
 
-	public List<Ticket> listTickets();
+	public Ticket findTicket(Integer restaurantId, Character type,
+			Timestamp getTime);
 
-	public void delete(Integer customerId, Integer restaurantId,
-			Character type, Timestamp getTime);
+	public List<Ticket> findTickets(Integer restaurantId, Character type);
 
-	public void update(Integer customerId, Integer restaurantId,
-			Character type, Timestamp getTime, Timestamp callTime,
-			Boolean status);
+	public List<Ticket> findUnrecordedTickets(Integer restaurantId,
+			Character type);
+
+	public int findNoOfTicketsAhead(Integer restaurantId, Character type,
+			Timestamp getTime);
+
+	public void deleteTicket(Integer restaurantId, Character type,
+			Timestamp getTime);
+
+	public void updateCallTime(Integer restaurantId, Character type,
+			Timestamp getTime);
+
+	public void updateValidity(Integer restaurantId, Character type,
+			Timestamp getTime);
 }

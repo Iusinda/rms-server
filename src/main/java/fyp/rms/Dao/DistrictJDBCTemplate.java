@@ -15,21 +15,21 @@ public class DistrictJDBCTemplate implements DistrictDao {
 
 	@Override
 	public void setDataSource(DataSource ds) {
-		// TODO Auto-generated method stub
 		this.dataSource = ds;
 		this.jdbcTemplateObject = new JdbcTemplate(dataSource);
 	}
 
 	@Override
-	public void create(String name, Integer areaId) {
-		// TODO Auto-generated method stub
-		String SQL = "INSERT INTO rms.District (Name,AreaId) VALUES ('?,?')";
+	public int createDistrict(String name, Integer areaId) {
+		String SQL = "INSERT INTO rms.District (Name,AreaId) VALUES (?,?)";
 		jdbcTemplateObject.update(SQL, name, areaId);
+		
+		SQL = "SELECT LAST_INSERT_ID()";
+		return jdbcTemplateObject.queryForInt(SQL);
 	}
 
 	@Override
-	public District getDistrict(Integer id) {
-		// TODO Auto-generated method stub
+	public District findDistrict(Integer id) {
 		String SQL = "SELECT * FROM rms.District WHERE DistrictID = ?)";
 		District district = jdbcTemplateObject.queryForObject(SQL,
 				new Object[] { id }, new DistrictMapper());
@@ -37,36 +37,23 @@ public class DistrictJDBCTemplate implements DistrictDao {
 	}
 
 	@Override
-	public List<District> listDistricts() {
-		// TODO Auto-generated method stub
-		String SQL = "SELECT * FROM rms.District";
-		List<District> district = jdbcTemplateObject.query(SQL,
-				new DistrictMapper());
-		return district;
+	public List<District> findDistricts(Integer areaId) {
+		String SQL = "SELECT * FROM rms.District WHERE AreaID = ?";
+		List<District> districts = jdbcTemplateObject.query(SQL,
+				new Object[] { areaId }, new DistrictMapper());
+		return districts;
 	}
 
 	@Override
-	public void delete(Integer id) {
-		// TODO Auto-generated method stub
-		String SQL = "DELETE FROM rms.District WHERE DistrictID = ?";
-		jdbcTemplateObject.update(SQL, id);
-
-	}
-
-	@Override
-	public void update(Integer id, String name, Integer areaId) {
-		// TODO Auto-generated method stub
+	public void updateDistrict(Integer id, String name, Integer areaId) {
 		String SQL = "UPUDATE rms.District SET Name = ?,AreaId = ? WHERE DistrictID = ?";
 		jdbcTemplateObject.update(SQL, new Object[] { name, areaId, id });
 	}
 
 	@Override
-	public District getDistrictByAreaId(Integer areaId) {
-		String SQL = "SELECT * FROM rms.Districts WHERE AreaID = ?";
-		District district = jdbcTemplateObject.queryForObject(SQL,
-				new Object[] { areaId }, new DistrictMapper());
-		return district;
+	public void deleteDistrict(Integer id) {
+		String SQL = "DELETE FROM rms.District WHERE DistrictID = ?";
+		jdbcTemplateObject.update(SQL, id);
 
 	}
-
 }

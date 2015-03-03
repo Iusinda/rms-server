@@ -13,15 +13,13 @@ import fyp.rms.Entity.District;
 public interface DistrictDao {
 	public void setDataSource(DataSource ds);
 
-	public void create(String name, Integer areaId);
+	public int createDistrict(String name, Integer areaId);
 
-	public District getDistrict(Integer id);
+	public District findDistrict(Integer id);
 
-	public List<District> listDistricts();
+	public List<District> findDistricts(Integer areaId);
 
-	public void delete(Integer id);
+	public void updateDistrict(Integer id, String name, Integer areaId);
 
-	public void update(Integer id, String name, Integer areaId);
-
-	public District getDistrictByAreaId(Integer areaId);
+	public void deleteDistrict(Integer id);
 }

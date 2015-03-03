@@ -13,14 +13,14 @@ import fyp.rms.Entity.Customer;
 public interface CustomerDao {
 	public void setDataSource(DataSource ds);
 
-	public void create(String regId);
+	public int createCustomer(String regId);
 
-	public Customer getCustomer(Integer id);
+	public Customer findCustomer(Integer id);
 
-	public List<Customer> listCustomers();
+	public List<Customer> findAllCustomers();
 
-	public void delete(Integer id);
+	public void updateCustomer(Integer id, String regId);
 
-	public void update(Integer id, String regId);
+	public void deleteCustomer(Integer id);
 	
 }

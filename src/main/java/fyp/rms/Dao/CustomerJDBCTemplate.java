@@ -15,23 +15,21 @@ public class CustomerJDBCTemplate implements CustomerDao {
 
 	@Override
 	public void setDataSource(DataSource ds) {
-		// TODO Auto-generated method stub
 		this.dataSource = ds;
 		this.jdbcTemplateObject = new JdbcTemplate(dataSource);
 	}
 
 	@Override
-	public void create(String regId) {
-		// TODO Auto-generated method stub
+	public int createCustomer(String regId) {
 		String SQL = "INSERT INTO rms.Customers (RegID) VALUES (?)";
 		jdbcTemplateObject.update(SQL, regId);
-		// do some log or other things
-
+		
+		SQL = "SELECT LAST_INSERT_ID()";
+		return jdbcTemplateObject.queryForInt(SQL);
 	}
 
 	@Override
-	public Customer getCustomer(Integer id) {
-		// TODO Auto-generated method stub\
+	public Customer findCustomer(Integer id) {
 		String SQL = "SELECT * FROM rms.Customers WHERE ID = ?";
 		Customer customer = jdbcTemplateObject.queryForObject(SQL,
 				new Object[] { id }, new CustomerMapper());
@@ -39,29 +37,22 @@ public class CustomerJDBCTemplate implements CustomerDao {
 	}
 
 	@Override
-	public List<Customer> listCustomers() {
-		// TODO Auto-generated method stub
+	public List<Customer> findAllCustomers() {
 		String SQL = "SELECT * FROM rms.Customers";
-		List<Customer> customer = jdbcTemplateObject.query(SQL,
+		List<Customer> customers = jdbcTemplateObject.query(SQL,
 				new CustomerMapper());
-		return customer;
+		return customers;
 	}
 
 	@Override
-	public void delete(Integer id) {
-		// TODO Auto-generated method stub
-		String SQL = "DELETE FROM rms.Customers WHERE ID = ?";
-		jdbcTemplateObject.update(SQL, id);
-		// do some log or other things
-	}
-
-	@Override
-	public void update(Integer id, String regId) {
-		// TODO Auto-generated method stub
+	public void updateCustomer(Integer id, String regId) {
 		String SQL = "UPUDATE rms.Customers SET RegID = ? WHERE ID = ?";
 		jdbcTemplateObject.update(SQL, new Object[] { id, regId });
-		// log and do somethings
 	}
-	
- 
+
+	@Override
+	public void deleteCustomer(Integer id) {
+		String SQL = "DELETE FROM rms.Customers WHERE ID = ?";
+		jdbcTemplateObject.update(SQL, id);
+	}
 }

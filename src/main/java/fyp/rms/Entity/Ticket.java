@@ -3,13 +3,13 @@ package fyp.rms.Entity;
 import java.sql.Timestamp;
 
 public class Ticket {
-	private Integer customerId;
 	private Integer restaurantId;
 	private String type;
+	private Integer size;
+	private Integer customerId;
 	private Timestamp getTime;
 	private Timestamp callTime;
 	private Boolean validity;
-	private Integer size;
 
 	public Integer getCustomerId() {
 		return customerId;

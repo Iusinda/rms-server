@@ -9,13 +9,13 @@ import fyp.rms.Entity.Area;
 public interface AreaDao {
 	public void setDataSource(DataSource ds);
 
-	public void create(String name);
+	public int createArea(String name);
 
-	public Area getArea(Integer id);
+	public Area findArea(Integer id);
 
-	public List<Area> listAreas();
+	public List<Area> findAllAreas();
 
-	public void delete(Integer id);
+	public void updateArea(Integer id, String name);
 
-	public void update(Integer id, String name);
+	public void deleteArea(Integer id);
 }

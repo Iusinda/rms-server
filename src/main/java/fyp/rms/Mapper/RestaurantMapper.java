@@ -10,7 +10,6 @@ import fyp.rms.Entity.Restaurant;
 /*
  * 	private Integer id;
  private Integer districtId;
- private String password;
  private String name;
  private String address;
  private String phoneNo;
