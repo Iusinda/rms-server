@@ -54,8 +54,8 @@ public class HomeController {
 				"jdbcConfig.xml");
 		CustomerJDBCTemplate customerOperator = (CustomerJDBCTemplate) context
 				.getBean("CustomerJDBCTemplate");
-		customerOperator.create("YO success");
-		Customer customer = customerOperator.getCustomer(2);
+		customerOperator.createCustomer("YO success");
+		Customer customer = customerOperator.findCustomer(2);
 
 		return customer;
 
@@ -68,7 +68,7 @@ public class HomeController {
 				"jdbcConfig.xml");
 		RestaurantJDBCTemplate restaurantTemplate = (RestaurantJDBCTemplate) context
 				.getBean("RestaurantJDBCTemplate");
-		List<Restaurant> restaurantList = restaurantTemplate.listRestaurants();
+		List<Restaurant> restaurantList = restaurantTemplate.findAllRestaurants();
 		return restaurantList;
 
 	}
