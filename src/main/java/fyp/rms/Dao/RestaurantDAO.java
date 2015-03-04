@@ -1,5 +1,6 @@
 package fyp.rms.Dao;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -21,31 +22,29 @@ import fyp.rms.Entity.Restaurant;
 public interface RestaurantDAO {
 	public void setDataSource(DataSource ds);
 
-	public int createRestaurant(String name, Integer districtId,
-			String address, String phoneNo, String openingHours,
-			String description, Boolean availability);
+	public int create(Restaurant restaurant);
 
-	public Restaurant findRestaurant(Integer id);
+	public Restaurant find(Integer id);
 
-	public List<Restaurant> findRestaurants(String name);
+	public List<Restaurant> find(String name);
 
-	public List<Restaurant> findRestaurantsByDistrictId(Integer districtId,
+	public List<Restaurant> findByDistrictId(Integer districtId,
 			String name);
 
-	public List<Restaurant> findRestaurantsByAreaId(Integer areaId, String name);
+	public List<Restaurant> findByAreaId(Integer areaId, String name);
 
-	public List<Restaurant> findAllRestaurants();
+	public List<Restaurant> findAll();
 
 	public boolean getValidation(Integer id, String password);
-
-	public void updateRestaurant(Integer id, Integer districtId, String name,
-			String address, String phoneNo, String openingHours,
-			String description, Boolean availability);
+	
+	public boolean update(Restaurant restaurant);
 
 	public boolean updateAvailability(Integer id, boolean available);
+	
+	public boolean updateAvailability(Integer id, boolean availability, Timestamp lastUpdate);
 
 	public boolean updatePassword(Integer id, String oldPassword,
 			String newPassword);
 
-	public void deleteRestaurant(Integer id);
+	public void delete(Integer id);
 }

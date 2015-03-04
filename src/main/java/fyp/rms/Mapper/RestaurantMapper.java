@@ -28,7 +28,7 @@ public class RestaurantMapper implements RowMapper<Restaurant> {
 		restaurant.setOpeningHours(rs.getString("OpeningHours"));
 		restaurant.setPhoneNo(rs.getString("PhoneNo"));
 		restaurant.setAvailability(rs.getBoolean("Availability"));
-		restaurant.setLastUpdate(rs.getDate("LastUpdate"));
+		restaurant.setLastUpdate(rs.getTimestamp("LastUpdate"));
 		return restaurant;
 	}
 }

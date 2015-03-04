@@ -68,7 +68,7 @@ public class HomeController {
 				"jdbcConfig.xml");
 		RestaurantJDBCTemplate restaurantTemplate = (RestaurantJDBCTemplate) context
 				.getBean("RestaurantJDBCTemplate");
-		List<Restaurant> restaurantList = restaurantTemplate.findAllRestaurants();
+		List<Restaurant> restaurantList = restaurantTemplate.findAll();
 		return restaurantList;
 
 	}
