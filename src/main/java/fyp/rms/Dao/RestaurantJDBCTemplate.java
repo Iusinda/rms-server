@@ -45,7 +45,8 @@ public class RestaurantJDBCTemplate implements RestaurantDAO {
 
 	@Override
 	public List<Restaurant> find(String name) {
-		String SQL = "SELECT * FROM rms.Restaurants WHERE Availability = TRUE AND Name LIKE '%?%'";
+		name = "%" + name + "%";
+		String SQL = "SELECT * FROM rms.Restaurants WHERE Availability = TRUE AND Name LIKE ?";
 		List<Restaurant> restaurants = jdbcTemplateObject.query(SQL,
 				new Object[] { name }, new RestaurantMapper());
 		return restaurants;
@@ -53,8 +54,9 @@ public class RestaurantJDBCTemplate implements RestaurantDAO {
 
 	@Override
 	public List<Restaurant> findByDistrictId(Integer districtId, String name) {
-		String SQL = "SELECT ID, Name FROM rms.Restaurants"
-				+ " WHERE Availability = TRUE AND DistrictID = ? AND Name LIKE '%?%';";
+		name = "%" + name + "%";
+		String SQL = "SELECT * FROM rms.Restaurants"
+				+ " WHERE Availability = TRUE AND DistrictID = ? AND Name LIKE ?";
 		List<Restaurant> restaurants = jdbcTemplateObject.query(SQL,
 				new Object[] { districtId, name }, new RestaurantMapper());
 		return restaurants;
@@ -62,8 +64,9 @@ public class RestaurantJDBCTemplate implements RestaurantDAO {
 
 	@Override
 	public List<Restaurant> findByAreaId(Integer areaId, String name) {
+		name = "%" + name + "%";
 		String SQL = "SELECT * FROM rms.Restaurants WHERE Availability = TRUE"
-				+ " AND DistrictID IN (SELECT ID FROM rms.Districts WHERE AreaID = ?) AND Name LIKE '%?%'";
+				+ " AND DistrictID IN (SELECT ID FROM rms.Districts WHERE AreaID = ?) AND Name LIKE ?";
 		List<Restaurant> restaurants = jdbcTemplateObject.query(SQL,
 				new Object[] { areaId, name }, new RestaurantMapper());
 		return restaurants;
@@ -78,51 +81,50 @@ public class RestaurantJDBCTemplate implements RestaurantDAO {
 	}
 
 	@Override
-	public boolean getValidation(Integer id, String password) {
+	public int authenticate(Integer id, String password) {
 		String SQL = "SELECT COUNT(*) FROM rms.Restaurants WHERE ID = ? AND Password = ?";
-		return (jdbcTemplateObject.queryForInt(SQL,
-				new Object[] { id, password }) == 1);
+		return jdbcTemplateObject.queryForInt(SQL,
+				new Object[] { id, password });
 	}
 
 	@Override
-	public boolean update(Restaurant restaurant) {
+	public int update(Restaurant restaurant) {
 		String SQL = "UPDATE rms.Restaurants SET DistrictID = ?, Name = ?, Address = ?, PhoneNo = ?, "
-				+ "OpeningHour = ?,Description = ?, Availability = ?, LastUpdate = NOW(6) WHERE ID = ?";
-		return (jdbcTemplateObject.update(
+				+ "OpeningHours = ?,Description = ? WHERE ID = ?";
+		return jdbcTemplateObject.update(
 				SQL,
 				new Object[] { restaurant.getDistrictId(),
 						restaurant.getName(), restaurant.getAddress(),
 						restaurant.getPhoneNo(), restaurant.getOpeningHours(),
 						restaurant.getDescription(),
-						restaurant.getAvailability(), restaurant.getId() }) == 1);
+						restaurant.getId() });
 	}
 
 	@Override
-	public boolean updateAvailability(Integer id, boolean availability) {
+	public int updateAvailability(Integer id, boolean availability) {
 		String SQL = "UPDATE rms.Restaurants SET Availability = ? WHERE ID = ?";
-		return (jdbcTemplateObject.update(SQL,
-				new Object[] { availability, id }) == 1);
+		return jdbcTemplateObject
+				.update(SQL, new Object[] { availability, id });
 	}
 
 	@Override
-	public boolean updateAvailability(Integer id, boolean availability,
+	public int updateAvailability(Integer id, boolean availability,
 			Timestamp lastUpdate) {
 		String SQL = "UPDATE rms.Restaurants SET Availability = ?, LastUpdate = ? WHERE ID = ?";
-		return (jdbcTemplateObject.update(SQL, new Object[] { availability,
-				lastUpdate.toString(), id }) == 1);
+		return jdbcTemplateObject.update(SQL, new Object[] { availability,
+				lastUpdate.toString(), id });
 	}
 
 	@Override
-	public boolean updatePassword(Integer id, String oldPassword,
-			String newPassword) {
+	public int updatePassword(Integer id, String password, String newPassword) {
 		String SQL = "UPDATE rms.Restaurants SET Password = ? WHERE ID = ? AND Password = ?";
-		return (jdbcTemplateObject.update(SQL, new Object[] { id, oldPassword,
-				newPassword }) == 1);
+		return jdbcTemplateObject.update(SQL, new Object[] { newPassword, id,
+				password });
 	}
 
 	@Override
-	public void delete(Integer id) {
+	public int delete(Integer id) {
 		String SQL = "DELETE FROM rms.Restaurants WHERE ID = ?";
-		jdbcTemplateObject.update(SQL, id);
+		return jdbcTemplateObject.update(SQL, id);
 	}
 }

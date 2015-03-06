@@ -35,16 +35,16 @@ public interface RestaurantDAO {
 
 	public List<Restaurant> findAll();
 
-	public boolean getValidation(Integer id, String password);
+	public int authenticate(Integer id, String password);
 	
-	public boolean update(Restaurant restaurant);
+	public int update(Restaurant restaurant);
 
-	public boolean updateAvailability(Integer id, boolean available);
+	public int updateAvailability(Integer id, boolean available);
 	
-	public boolean updateAvailability(Integer id, boolean availability, Timestamp lastUpdate);
+	public int updateAvailability(Integer id, boolean availability, Timestamp lastUpdate);
 
-	public boolean updatePassword(Integer id, String oldPassword,
+	public int updatePassword(Integer id, String oldPassword,
 			String newPassword);
 
-	public void delete(Integer id);
+	public int delete(Integer id);
 }
