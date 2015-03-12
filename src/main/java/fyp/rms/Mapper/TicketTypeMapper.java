@@ -13,8 +13,7 @@ public class TicketTypeMapper implements RowMapper<TicketType>{
 		TicketType ticketType = new TicketType();
 		ticketType.setMaxSize(rs.getInt("MaxSize"));
 		ticketType.setRestaurantId(rs.getInt("RestaurantID"));
-		ticketType.setType(rs.getString("Type"));
+		ticketType.setType(rs.getInt("Type"));
 		return ticketType;
 	}
-
 }

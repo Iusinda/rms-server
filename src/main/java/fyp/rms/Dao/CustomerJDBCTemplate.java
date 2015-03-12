@@ -20,16 +20,16 @@ public class CustomerJDBCTemplate implements CustomerDao {
 	}
 
 	@Override
-	public int createCustomer(String regId) {
+	public int create(Customer customer) {
 		String SQL = "INSERT INTO rms.Customers (RegID) VALUES (?)";
-		jdbcTemplateObject.update(SQL, regId);
-		
+		jdbcTemplateObject.update(SQL, customer.getRegId());
+
 		SQL = "SELECT LAST_INSERT_ID()";
 		return jdbcTemplateObject.queryForInt(SQL);
 	}
 
 	@Override
-	public Customer findCustomer(Integer id) {
+	public Customer find(Integer id) {
 		String SQL = "SELECT * FROM rms.Customers WHERE ID = ?";
 		Customer customer = jdbcTemplateObject.queryForObject(SQL,
 				new Object[] { id }, new CustomerMapper());
@@ -37,7 +37,7 @@ public class CustomerJDBCTemplate implements CustomerDao {
 	}
 
 	@Override
-	public List<Customer> findAllCustomers() {
+	public List<Customer> findAll() {
 		String SQL = "SELECT * FROM rms.Customers";
 		List<Customer> customers = jdbcTemplateObject.query(SQL,
 				new CustomerMapper());
@@ -45,14 +45,15 @@ public class CustomerJDBCTemplate implements CustomerDao {
 	}
 
 	@Override
-	public void updateCustomer(Integer id, String regId) {
+	public int update(Customer customer) {
 		String SQL = "UPUDATE rms.Customers SET RegID = ? WHERE ID = ?";
-		jdbcTemplateObject.update(SQL, new Object[] { id, regId });
+		return jdbcTemplateObject.update(SQL, new Object[] { customer.getId(),
+				customer.getRegId() });
 	}
 
 	@Override
-	public void deleteCustomer(Integer id) {
+	public int delete(Integer id) {
 		String SQL = "DELETE FROM rms.Customers WHERE ID = ?";
-		jdbcTemplateObject.update(SQL, id);
+		return jdbcTemplateObject.update(SQL, id);
 	}
 }

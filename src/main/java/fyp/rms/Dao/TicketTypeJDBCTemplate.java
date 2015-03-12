@@ -20,16 +20,17 @@ public class TicketTypeJDBCTemplate implements TicketTypeDao {
 	}
 
 	@Override
-	public void createTicketType(Integer restaurantId, Character type,
-			Integer maxSize) {
+	public int create(TicketType ticketType) {
 		String SQL = "INSERT INTO rms.TicketTypes "
 				+ "(RestaurantID,Type,MaxSize)" + " VALUES (?,?,?)";
-		jdbcTemplateObject.update(SQL, new Object[] { restaurantId, type,
-				maxSize });
+		return jdbcTemplateObject.update(
+				SQL,
+				new Object[] { ticketType.getRestaurantId(),
+						ticketType.getType(), ticketType.getMaxSize() });
 	}
 
 	@Override
-	public TicketType findTicketType(Integer restaurantId, Character type) {
+	public TicketType find(Integer restaurantId, Integer type) {
 		String SQL = "SELECT * FROM rms.TicketTypes WHERE RestaurantID = ? AND Type = ?";
 		TicketType ticketType = jdbcTemplateObject.queryForObject(SQL,
 				new Object[] { restaurantId, type }, new TicketTypeMapper());
@@ -37,7 +38,7 @@ public class TicketTypeJDBCTemplate implements TicketTypeDao {
 	}
 
 	@Override
-	public List<TicketType> findTicketTypes(Integer restaurantId) {
+	public List<TicketType> findByRestaurant(Integer restaurantId) {
 		String SQL = "SELECT * FROM rms.TicketTypes WHERE RestaurantID = ?";
 		List<TicketType> ticketTypes = jdbcTemplateObject.query(SQL,
 				new Object[] { restaurantId }, new TicketTypeMapper());
@@ -45,17 +46,19 @@ public class TicketTypeJDBCTemplate implements TicketTypeDao {
 	}
 
 	@Override
-	public void updateTicketType(Integer restaurantId, Character type,
-			Integer maxSize) {
+	public int update(TicketType ticketType) {
 		String SQL = "UPDATE rms.TicketTypes SET maxSize = ?"
 				+ "WHERE RestaurantId = ? AND Type = ?";
-		jdbcTemplateObject.update(SQL, new Object[] { maxSize, restaurantId,
-				type });
+		return jdbcTemplateObject.update(
+				SQL,
+				new Object[] { ticketType.getMaxSize(),
+						ticketType.getRestaurantId(), ticketType.getType() });
 	}
 
 	@Override
-	public void deleteTicketType(Integer restaurantId, Character type) {
+	public int delete(Integer restaurantId, Integer type) {
 		String SQL = "DELETE FROM rms.TicketTypes WHERE RestaurantId = ?,Type = ?";
-		jdbcTemplateObject.update(SQL, new Object[] { restaurantId, type });
+		return jdbcTemplateObject.update(SQL,
+				new Object[] { restaurantId, type });
 	}
 }

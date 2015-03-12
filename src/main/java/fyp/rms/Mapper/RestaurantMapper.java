@@ -7,16 +7,6 @@ import org.springframework.jdbc.core.RowMapper;
 
 import fyp.rms.Entity.Restaurant;
 
-/*
- * 	private Integer id;
- private Integer districtId;
- private String name;
- private String address;
- private String phoneNo;
- private String openingHours;
- private String description;
- private Boolean status;
- * */
 public class RestaurantMapper implements RowMapper<Restaurant> {
 	public Restaurant mapRow(ResultSet rs, int rowNum) throws SQLException {
 		Restaurant restaurant = new Restaurant();
@@ -28,7 +18,6 @@ public class RestaurantMapper implements RowMapper<Restaurant> {
 		restaurant.setOpeningHours(rs.getString("OpeningHours"));
 		restaurant.setPhoneNo(rs.getString("PhoneNo"));
 		restaurant.setAvailability(rs.getBoolean("Availability"));
-		restaurant.setLastUpdate(rs.getTimestamp("LastUpdate"));
 		return restaurant;
 	}
 }

@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS rms.PastTickets;
 DROP TABLE IF EXISTS rms.Tickets;
 DROP TABLE IF EXISTS rms.TicketTypes;
 DROP TABLE IF EXISTS rms.Restaurants;
@@ -36,14 +37,13 @@ PhoneNo VARCHAR(50),
 OpeningHours VARCHAR(50),
 Description TINYTEXT,
 Availability BIT(1) DEFAULT FALSE,
-LastUpdate DATETIME(6) DEFAULT NOW(6),
 FOREIGN KEY (DistrictID) REFERENCES rms.Districts(ID)
 );
 
 CREATE TABLE rms.TicketTypes
 (
 RestaurantID INT,
-Type CHAR,
+Type TINYINT,
 MaxSize TINYINT,
 FOREIGN KEY (RestaurantID) REFERENCES rms.Restaurants(ID),
 CONSTRAINT TicketTypeID PRIMARY KEY (RestaurantID, Type)
@@ -51,14 +51,34 @@ CONSTRAINT TicketTypeID PRIMARY KEY (RestaurantID, Type)
 
 CREATE TABLE rms.Tickets
 (
+CustomerID INT DEFAULT NULL,
 RestaurantID INT,
-Type CHAR,
+Type TINYINT,
 Size TINYINT,
-CustomerID INT,
-GetTime DATETIME(6) DEFAULT NOW(6),
+Number INT,
+Position INT,
+Duration INT,
+GetTime DATETIME DEFAULT NOW(),
 CallTime DATETIME NULL DEFAULT NULL,
 Validity BIT(1) DEFAULT TRUE,
 FOREIGN KEY (CustomerID) REFERENCES rms.Customers(ID),
 FOREIGN KEY (RestaurantID, Type) REFERENCES rms.TicketTypes(RestaurantID, Type),
-CONSTRAINT TicketID PRIMARY KEY (RestaurantID, Type, GetTime)
+CONSTRAINT TicketID PRIMARY KEY (RestaurantID, Type, Number)
+);
+
+CREATE TABLE rms.PastTickets
+(
+CustomerID INT DEFAULT NULL,
+RestaurantID INT,
+Type TINYINT,
+Size TINYINT,
+Number INT,
+Position INT,
+Duration INT,
+GetTime DATETIME DEFAULT NOW(),
+CallTime DATETIME NULL DEFAULT NULL,
+Validity BIT(1) DEFAULT TRUE,
+FOREIGN KEY (CustomerID) REFERENCES rms.Customers(ID),
+FOREIGN KEY (RestaurantID, Type) REFERENCES rms.TicketTypes(RestaurantID, Type),
+CONSTRAINT TicketID PRIMARY KEY (RestaurantID, Type, Number, GetTime)
 );

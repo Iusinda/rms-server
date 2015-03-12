@@ -54,8 +54,8 @@ public class HomeController {
 				"jdbcConfig.xml");
 		CustomerJDBCTemplate customerOperator = (CustomerJDBCTemplate) context
 				.getBean("CustomerJDBCTemplate");
-		customerOperator.createCustomer("YO success");
-		Customer customer = customerOperator.findCustomer(2);
+		//customerOperator.create("YO success");
+		Customer customer = customerOperator.find(2);
 
 		return customer;
 

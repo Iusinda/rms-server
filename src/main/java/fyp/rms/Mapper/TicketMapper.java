@@ -10,15 +10,16 @@ import fyp.rms.Entity.Ticket;
 public class TicketMapper implements RowMapper<Ticket> {
 	public Ticket mapRow(ResultSet rs, int rowNum) throws SQLException {
 		Ticket ticket = new Ticket();
-		ticket.setCallTime(rs.getTimestamp("CallTime"));
 		ticket.setCustomerId(rs.getInt("CustomerID"));
-		ticket.setGetTime(rs.getTimestamp("GetTime"));
 		ticket.setRestaurantId(rs.getInt("RestaurantID"));
-		ticket.setValidity(rs.getBoolean("Validity"));
-		ticket.setType(rs.getString("Type"));
+		ticket.setType(rs.getInt("Type"));
 		ticket.setSize(rs.getInt("Size"));
+		ticket.setNumber(rs.getInt("Number"));
+		ticket.setPosition(rs.getInt("Position"));
+		ticket.setDuration(rs.getInt("Duration"));
+		ticket.setGetTime(rs.getTimestamp("GetTime"));
+		ticket.setCallTime(rs.getTimestamp("CallTime"));
+		ticket.setValidity(rs.getBoolean("Validity"));
 		return ticket;
-
 	}
-
 }

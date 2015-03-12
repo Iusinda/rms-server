@@ -1,10 +1,10 @@
 package fyp.rms.Dao;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import fyp.rms.Entity.Ticket;
@@ -21,34 +21,40 @@ public class TicketJDBCTemplate implements TicketDao {
 	}
 
 	@Override
-	public void createTicket(Integer restaurantId, Character type,
-			Integer size, Integer customerId) {
-		String SQL = "INSERT INTO rms.Tickets "
-				+ "(RestaurantID,Type,Size,CustomerID) VALUES (?,?,?,?)";
-		jdbcTemplateObject.update(SQL, new Object[] { restaurantId, type, size,
-				customerId });
+	public int create(Ticket ticket) {
+		String SQL = "INSERT INTO rms.Tickets (CustomerID, RestaurantID, Type, "
+				+ "Size, Number, Position, Duration) VALUES (?,?,?,?,?,?,?)";
+		return jdbcTemplateObject.update(
+				SQL,
+				new Object[] { ticket.getCustomerId(),
+						ticket.getRestaurantId(), ticket.getType(),
+						ticket.getSize(), ticket.getNumber(),
+						ticket.getPosition(), ticket.getDuration() });
 	}
 
 	@Override
-	public void createTicket(Integer restaurantId, Character type, Integer size) {
-		String SQL = "INSERT INTO rms.Tickets (RestaurantID,Type,Size)"
-				+ " VALUES (?,?,?)";
-		jdbcTemplateObject.update(SQL,
-				new Object[] { restaurantId, type, size });
+	public Ticket find(Integer customerId) {
+		try {
+			String SQL = "SELECT * FROM rms.Tickets WHERE CustomerID = ? AND Validity = TRUE";
+			Ticket ticket = jdbcTemplateObject.queryForObject(SQL,
+					new Object[] { customerId }, new TicketMapper());
+			return ticket;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 	@Override
-	public Ticket findTicket(Integer restaurantId, Character type,
-			Timestamp getTime) {
+	public Ticket find(Integer restaurantId, Integer type, Integer number) {
 		String SQL = "SELECT * FROM rms.Tickets"
-				+ " WHERE AND RestaurantID = ? AND Type = ? AND GetTime = ?";
+				+ " WHERE RestaurantID = ? AND Type = ? AND Number = ?";
 		Ticket ticket = jdbcTemplateObject.queryForObject(SQL, new Object[] {
-				restaurantId, type, getTime }, new TicketMapper());
+				restaurantId, type, number }, new TicketMapper());
 		return ticket;
 	}
 
 	@Override
-	public List<Ticket> findTickets(Integer restaurantId, Character type) {
+	public List<Ticket> findByType(Integer restaurantId, Integer type) {
 		String SQL = "SELECT * FROM rms.Tickets WHERE RestaurantID = ? AND Type = ?"
 				+ " AND Validity = TRUE ORDER BY GetTime";
 		List<Ticket> tickets = jdbcTemplateObject.query(SQL, new Object[] {
@@ -57,46 +63,75 @@ public class TicketJDBCTemplate implements TicketDao {
 	}
 
 	@Override
-	public List<Ticket> findUnrecordedTickets(Integer restaurantId,
-			Character type) {
-		String SQL = "SELECT GetTime, CallTime FROM rms.Tickets WHERE RestaurantID = ? AND Type = ?"
-				+ " AND CallTime > (SELECT LastUpdate FROM rms.Restaurants WHERE ID = ?)";
-		List<Ticket> tickets = jdbcTemplateObject.query(SQL, new Object[] {
-				restaurantId, type, restaurantId }, new TicketMapper());
+	public List<Ticket> findByRestaurant(Integer restaurantId) {
+		String SQL = "SELECT * FROM rms.Tickets WHERE RestaurantID = ? AND CallTime IS NOT NULL";
+		List<Ticket> tickets = jdbcTemplateObject.query(SQL,
+				new Object[] { restaurantId }, new TicketMapper());
 		return tickets;
 	}
 
 	@Override
-	public int findNoOfTicketsAhead(Integer restaurantId, Character type,
-			Timestamp getTime) {
-		String SQL = "SELECT COUNT(*) FROM rms.Tickets WHERE RestaurantID = ? AND Type = ?"
-				+ " AND GetTime < ? AND Validity = TRUE AND CallTime IS NULL";
+	public int findNumber(Integer restaurantId, Integer type) {
+		String SQL = "SELECT COUNT(*) FROM rms.Tickets WHERE RestaurantID = ? AND Type = ?";
 		return jdbcTemplateObject.queryForInt(SQL, new Object[] { restaurantId,
-				type, getTime });
+				type });
 	}
 
 	@Override
-	public void updateCallTime(Integer restaurantId, Character type,
-			Timestamp getTime) {
-		String SQL = "UPDATE rms.Tickets SET CallTime = NOW() WHERE RestaurantID = ? AND Type = ? AND GetTime = ?";
-		jdbcTemplateObject.update(SQL, new Object[] { restaurantId, type,
-				getTime });
+	public int findPosition(Integer restaurantId, Integer type) {
+		String SQL = "SELECT COUNT(*) FROM rms.Tickets WHERE RestaurantID = ? "
+				+ "AND Type = ? AND Validity = TRUE AND CallTime IS NULL";
+		return jdbcTemplateObject.queryForInt(SQL, new Object[] { restaurantId,
+				type });
 	}
 
 	@Override
-	public void updateValidity(Integer restaurantId, Character type,
-			Timestamp getTime) {
-		String SQL = "UPDATE rms.Tickets SET Validity = FALSE WHERE RestaurantID = ? AND Type = ? AND GetTime = ?";
-		jdbcTemplateObject.update(SQL, new Object[] { restaurantId, type,
-				getTime });
+	public int findPosition(Integer restaurantId, Integer type, Integer number) {
+		String SQL = "SELECT COUNT(*) FROM rms.Tickets WHERE RestaurantID = ? AND Type = ?"
+				+ " AND Number < ? AND Validity = TRUE AND CallTime IS NULL";
+		return jdbcTemplateObject.queryForInt(SQL, new Object[] { restaurantId,
+				type, number });
 	}
 
 	@Override
-	public void deleteTicket(Integer restaurantId, Character type,
-			Timestamp getTime) {
-		String SQL = "DELETE FROM rms.Tickets "
-				+ "WHERE RestaurantID = ?,Type = ?,GetTime = ?";
-		jdbcTemplateObject.update(SQL, new Object[] { restaurantId, type,
-				getTime });
+	public int updateCallTime(Integer restaurantId, Integer type) {
+		String SQL = "SELECT Number FROM rms.Tickets WHERE RestaurantID = ? AND Type = ? "
+				+ "AND Validity = TRUE AND CallTime IS NULL ORDER BY Number LIMIT 1";
+		Integer number = jdbcTemplateObject.queryForInt(SQL, new Object[] {
+				restaurantId, type });
+		SQL = "UPDATE rms.Tickets SET CallTime = NOW() "
+				+ "WHERE RestaurantID = ? AND Type = ? AND Number = ?";
+		if (jdbcTemplateObject.update(SQL, new Object[] { restaurantId, type,
+				number }) == 1)
+			return number;
+		else
+			return 0;
+	}
+
+	@Override
+	public int updateValidity(Integer customerId) {
+		String SQL = "UPDATE rms.Tickets SET Validity = FALSE "
+				+ "WHERE CustomerID = ? AND Validity = TRUE";
+		return jdbcTemplateObject.update(SQL, new Object[] { customerId });
+	}
+
+	@Override
+	public int updateValidity(Integer restaurantId, Integer type, Integer number) {
+		String SQL = "UPDATE rms.Tickets SET Validity = FALSE "
+				+ "WHERE RestaurantID = ? AND Type = ? AND Number = ?";
+		return jdbcTemplateObject.update(SQL, new Object[] { restaurantId,
+				type, number });
+	}
+
+	@Override
+	public int delete(Integer restaurantId) {
+		String SQL = "INSERT INTO rms.PastTickets SELECT * FROM rms.Tickets WHERE RestaurantID = ?";
+		jdbcTemplateObject.update(SQL, new Object[] { restaurantId });
+		SQL = "DELETE FROM rms.Tickets WHERE RestaurantID = ?";
+		jdbcTemplateObject.update(SQL, new Object[] { restaurantId });
+
+		SQL = "SELECT COUNT(*) FROM rms.Tickets WHERE RestaurantID = ?";
+		return jdbcTemplateObject.queryForInt(SQL,
+				new Object[] { restaurantId });
 	}
 }

@@ -15,5 +15,4 @@ public class AreaMapper implements RowMapper<Area> {
 		area.setName(rs.getString("Name"));
 		return area;
 	}
-
 }

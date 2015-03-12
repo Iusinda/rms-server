@@ -1,6 +1,5 @@
 package fyp.rms.Dao;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -44,7 +43,7 @@ public class RestaurantJDBCTemplate implements RestaurantDAO {
 	}
 
 	@Override
-	public List<Restaurant> find(String name) {
+	public List<Restaurant> findByName(String name) {
 		name = "%" + name + "%";
 		String SQL = "SELECT * FROM rms.Restaurants WHERE Availability = TRUE AND Name LIKE ?";
 		List<Restaurant> restaurants = jdbcTemplateObject.query(SQL,
@@ -53,7 +52,7 @@ public class RestaurantJDBCTemplate implements RestaurantDAO {
 	}
 
 	@Override
-	public List<Restaurant> findByDistrictId(Integer districtId, String name) {
+	public List<Restaurant> findByDistrict(Integer districtId, String name) {
 		name = "%" + name + "%";
 		String SQL = "SELECT * FROM rms.Restaurants"
 				+ " WHERE Availability = TRUE AND DistrictID = ? AND Name LIKE ?";
@@ -63,7 +62,7 @@ public class RestaurantJDBCTemplate implements RestaurantDAO {
 	}
 
 	@Override
-	public List<Restaurant> findByAreaId(Integer areaId, String name) {
+	public List<Restaurant> findByArea(Integer areaId, String name) {
 		name = "%" + name + "%";
 		String SQL = "SELECT * FROM rms.Restaurants WHERE Availability = TRUE"
 				+ " AND DistrictID IN (SELECT ID FROM rms.Districts WHERE AreaID = ?) AND Name LIKE ?";
@@ -91,13 +90,11 @@ public class RestaurantJDBCTemplate implements RestaurantDAO {
 	public int update(Restaurant restaurant) {
 		String SQL = "UPDATE rms.Restaurants SET DistrictID = ?, Name = ?, Address = ?, PhoneNo = ?, "
 				+ "OpeningHours = ?,Description = ? WHERE ID = ?";
-		return jdbcTemplateObject.update(
-				SQL,
+		return jdbcTemplateObject.update(SQL,
 				new Object[] { restaurant.getDistrictId(),
 						restaurant.getName(), restaurant.getAddress(),
 						restaurant.getPhoneNo(), restaurant.getOpeningHours(),
-						restaurant.getDescription(),
-						restaurant.getId() });
+						restaurant.getDescription(), restaurant.getId() });
 	}
 
 	@Override
@@ -105,14 +102,6 @@ public class RestaurantJDBCTemplate implements RestaurantDAO {
 		String SQL = "UPDATE rms.Restaurants SET Availability = ? WHERE ID = ?";
 		return jdbcTemplateObject
 				.update(SQL, new Object[] { availability, id });
-	}
-
-	@Override
-	public int updateAvailability(Integer id, boolean availability,
-			Timestamp lastUpdate) {
-		String SQL = "UPDATE rms.Restaurants SET Availability = ?, LastUpdate = ? WHERE ID = ?";
-		return jdbcTemplateObject.update(SQL, new Object[] { availability,
-				lastUpdate.toString(), id });
 	}
 
 	@Override

@@ -6,21 +6,17 @@ import javax.sql.DataSource;
 
 import fyp.rms.Entity.Customer;
 
-/*
- * private Integer id;
- private String regId;
- * */
 public interface CustomerDao {
 	public void setDataSource(DataSource ds);
 
-	public int createCustomer(String regId);
+	public int create(Customer customer);
 
-	public Customer findCustomer(Integer id);
+	public Customer find(Integer id);
 
-	public List<Customer> findAllCustomers();
+	public List<Customer> findAll();
 
-	public void updateCustomer(Integer id, String regId);
+	public int update(Customer customer);
 
-	public void deleteCustomer(Integer id);
+	public int delete(Integer id);
 	
 }

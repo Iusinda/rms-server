@@ -1,8 +1,5 @@
 package fyp.rms.Entity;
 
-import java.sql.Date;
-import java.sql.Timestamp;
-
 public class Restaurant {
 	private Integer id;
 	private Integer districtId;
@@ -12,7 +9,21 @@ public class Restaurant {
 	private String openingHours;
 	private String description;
 	private Boolean availability;
-	private Timestamp lastUpdate;
+
+	public Restaurant() {
+	}
+
+	public Restaurant(Integer id, Integer districtId, String name,
+			String address, String phoneNo, String openingHours,
+			String description) {
+		this.id = id;
+		this.districtId = districtId;
+		this.name = name;
+		this.address = address;
+		this.phoneNo = phoneNo;
+		this.openingHours = openingHours;
+		this.description = description;
+	}
 
 	public Integer getId() {
 		return id;
@@ -77,13 +88,4 @@ public class Restaurant {
 	public void setAvailability(Boolean availability) {
 		this.availability = availability;
 	}
-
-	public Timestamp getLastUpdate() {
-		return lastUpdate;
-	}
-
-	public void setLastUpdate(Timestamp lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
-
 }

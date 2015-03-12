@@ -7,9 +7,7 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import fyp.rms.Entity.Area;
-import fyp.rms.Entity.Customer;
 import fyp.rms.Mapper.AreaMapper;
-import fyp.rms.Mapper.CustomerMapper;
 
 public class AreaJDBCTemplate implements AreaDao {
 	private DataSource dataSource;
@@ -22,16 +20,16 @@ public class AreaJDBCTemplate implements AreaDao {
 	}
 
 	@Override
-	public int createArea(String name) {
+	public int create(Area area) {
 		String SQL = "INSERT INTO rms.Areas (Name) VALUES (?)";
-		jdbcTemplateObject.update(SQL, name);
-		
+		jdbcTemplateObject.update(SQL, area.getName());
+
 		SQL = "SELECT LAST_INSERT_ID()";
 		return jdbcTemplateObject.queryForInt(SQL);
 	}
 
 	@Override
-	public Area findArea(Integer id) {
+	public Area find(Integer id) {
 		String SQL = "SELECT * FROM rms.Areas WHERE ID = ?";
 		Area area = jdbcTemplateObject.queryForObject(SQL, new Object[] { id },
 				new AreaMapper());
@@ -39,22 +37,22 @@ public class AreaJDBCTemplate implements AreaDao {
 	}
 
 	@Override
-	public List<Area> findAllAreas() {
+	public List<Area> findAll() {
 		String SQL = "SELECT * FROM rms.Areas";
 		List<Area> areas = jdbcTemplateObject.query(SQL, new AreaMapper());
 		return areas;
 	}
 
 	@Override
-	public void updateArea(Integer id, String name) {
+	public int update(Area area) {
 		String SQL = "UPUDATE rms.Areas SET Name = ? WHERE ID = ?";
-		jdbcTemplateObject.update(SQL, new Object[] { id, name });
+		return jdbcTemplateObject.update(SQL,
+				new Object[] { area.getId(), area.getName() });
 	}
 
 	@Override
-	public void deleteArea(Integer id) {
+	public int delete(Integer id) {
 		String SQL = "DELETE FROM rms.Areas WHERE ID = ?";
-		jdbcTemplateObject.update(SQL, id);
-
+		return jdbcTemplateObject.update(SQL, id);
 	}
 }

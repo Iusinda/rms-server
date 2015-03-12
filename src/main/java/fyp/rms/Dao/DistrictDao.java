@@ -6,20 +6,16 @@ import javax.sql.DataSource;
 
 import fyp.rms.Entity.District;
 
-/*
- * 	private Integer id;
- private String name;
- * */
 public interface DistrictDao {
 	public void setDataSource(DataSource ds);
 
-	public int createDistrict(String name, Integer areaId);
+	public int create(District district);
 
-	public District findDistrict(Integer id);
+	public District find(Integer id);
 
-	public List<District> findDistricts(Integer areaId);
+	public List<District> findByArea(Integer areaId);
 
-	public void updateDistrict(Integer id, String name, Integer areaId);
+	public int update(District district);
 
-	public void deleteDistrict(Integer id);
+	public int delete(Integer id);
 }

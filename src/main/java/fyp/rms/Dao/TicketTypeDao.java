@@ -16,13 +16,13 @@ public interface TicketTypeDao {
 
 	public void setDataSource(DataSource ds);
 
-	public void createTicketType(Integer restaurantId, Character type, Integer maxSize);
+	public int create(TicketType ticketType);
 
-	public TicketType findTicketType(Integer restaurantId, Character type);
+	public TicketType find(Integer restaurantId, Integer type);
 
-	public List<TicketType> findTicketTypes(Integer restaurantId);
+	public List<TicketType> findByRestaurant(Integer restaurantId);
 
-	public void updateTicketType(Integer restaurantId, Character type, Integer maxSize);
+	public int update(TicketType ticketType);
 
-	public void deleteTicketType(Integer restaurantId, Character type);
+	public int delete(Integer restaurantId, Integer type);
 }

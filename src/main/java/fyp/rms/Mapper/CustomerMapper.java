@@ -14,5 +14,4 @@ public class CustomerMapper implements RowMapper<Customer> {
 		customer.setRegId(rs.getString("RegID"));
 		return customer;
 	}
-
 }

@@ -17,6 +17,9 @@
 	<bean id="CustomerJDBCTemplate" class="fyp.rms.Dao.CustomerJDBCTemplate">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+	<bean id="AreaJDBCTemplate" class="fyp.rms.Dao.AreaJDBCTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
 	<bean id="DistrictJDBCTemplate" class="fyp.rms.Dao.DistrictJDBCTemplate">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
