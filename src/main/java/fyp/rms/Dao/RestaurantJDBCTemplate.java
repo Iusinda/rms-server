@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import fyp.rms.Entity.Restaurant;
 import fyp.rms.Mapper.RestaurantMapper;
+import fyp.rms.Mapper.SimpleRestaurantMapper;
 
 public class RestaurantJDBCTemplate implements RestaurantDAO {
 	private DataSource dataSource;
@@ -47,7 +48,7 @@ public class RestaurantJDBCTemplate implements RestaurantDAO {
 		name = "%" + name + "%";
 		String SQL = "SELECT * FROM rms.Restaurants WHERE Availability = TRUE AND Name LIKE ?";
 		List<Restaurant> restaurants = jdbcTemplateObject.query(SQL,
-				new Object[] { name }, new RestaurantMapper());
+				new Object[] { name }, new SimpleRestaurantMapper());
 		return restaurants;
 	}
 
@@ -57,7 +58,7 @@ public class RestaurantJDBCTemplate implements RestaurantDAO {
 		String SQL = "SELECT * FROM rms.Restaurants"
 				+ " WHERE Availability = TRUE AND DistrictID = ? AND Name LIKE ?";
 		List<Restaurant> restaurants = jdbcTemplateObject.query(SQL,
-				new Object[] { districtId, name }, new RestaurantMapper());
+				new Object[] { districtId, name }, new SimpleRestaurantMapper());
 		return restaurants;
 	}
 
@@ -67,7 +68,7 @@ public class RestaurantJDBCTemplate implements RestaurantDAO {
 		String SQL = "SELECT * FROM rms.Restaurants WHERE Availability = TRUE"
 				+ " AND DistrictID IN (SELECT ID FROM rms.Districts WHERE AreaID = ?) AND Name LIKE ?";
 		List<Restaurant> restaurants = jdbcTemplateObject.query(SQL,
-				new Object[] { areaId, name }, new RestaurantMapper());
+				new Object[] { areaId, name }, new SimpleRestaurantMapper());
 		return restaurants;
 	}
 
@@ -75,7 +76,7 @@ public class RestaurantJDBCTemplate implements RestaurantDAO {
 	public List<Restaurant> findAll() {
 		String SQL = "SELECT * FROM rms.Restaurants WHERE Availability = TRUE";
 		List<Restaurant> restaurants = jdbcTemplateObject.query(SQL,
-				new RestaurantMapper());
+				new SimpleRestaurantMapper());
 		return restaurants;
 	}
 

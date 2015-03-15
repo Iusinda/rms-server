@@ -25,7 +25,7 @@ public class AreaController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(AreaController.class);
 
-	@RequestMapping(value = "/areas", method = RequestMethod.GET)
+	@RequestMapping(value = "/areas")
 	@ResponseBody
 	public List<Area> listAll() {
 		List<Area> areas = repository().findAll();

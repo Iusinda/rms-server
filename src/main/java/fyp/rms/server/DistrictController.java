@@ -26,7 +26,7 @@ public class DistrictController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DistrictController.class);
 
-	@RequestMapping(value = "/districts", method = RequestMethod.GET)
+	@RequestMapping(value = "/districts")
 	@ResponseBody
 	public List<District> list(@RequestParam Integer areaId) {
 		List<District> districts = repository().findByArea(areaId);

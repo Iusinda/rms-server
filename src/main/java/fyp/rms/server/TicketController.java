@@ -52,9 +52,9 @@ public class TicketController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(TicketController.class);
 
-	@RequestMapping(value = "/ticket", method = RequestMethod.GET)
+	@RequestMapping(value = "/ticket", params = "customerId")
 	@ResponseBody
-	public Ticket info(@RequestParam Integer customerId) {
+	public Ticket view(@RequestParam Integer customerId) {
 		Ticket ticket = repository().find(customerId);
 		if (ticket != null) {
 			updateEstimation(ticket);
@@ -66,81 +66,78 @@ public class TicketController {
 		return ticket;
 	}
 
-	@RequestMapping(value = "/ticket/preview", method = RequestMethod.GET)
+	@RequestMapping(value = "/ticket", params = "id")
 	@ResponseBody
-	public Ticket preview(@RequestParam Integer restaurantId,
-			@RequestParam Integer type) {
-		Ticket ticket = new Ticket(restaurantId, type);
+	public Ticket preview(@RequestParam Integer id, @RequestParam Integer type) {
+		Ticket ticket = new Ticket(id, type);
 		performEstimation(ticket);
 		logger.info("Return preview of " + (char) (type + 65)
-				+ " type ticket of Restaurant " + restaurantId);
+				+ " type ticket of Restaurant " + id);
 		return ticket;
 	}
 
-	@RequestMapping(value = "/ticket/create", method = RequestMethod.GET)
+	@RequestMapping(value = "/ticket/create")
 	@ResponseBody
-	public Ticket create(@RequestParam Integer restaurantId,
-			@RequestParam Integer type, @RequestParam Integer size,
+	public Ticket create(@RequestParam Integer id, @RequestParam Integer type,
+			@RequestParam Integer size,
 			@RequestParam(required = false) Integer customerId) {
-		Integer number = repository().findNumber(restaurantId, type) + 1;
-		Ticket ticket = new Ticket(restaurantId, type, number, size, customerId);
+		Integer number = repository().findNumber(id, type) + 1;
+		Ticket ticket = new Ticket(id, type, number, size, customerId);
 		performEstimation(ticket);
 		boolean result = repository().create(ticket) == 1;
 		logger.info("Dispense Ticket " + (char) (type + 65) + number
-				+ " of Restaurant " + restaurantId
+				+ " of Restaurant " + id
 				+ (result ? " successfully" : " unsuccessfully"));
 		return ticket;
 	}
 
-	@RequestMapping(value = "/ticket/call", method = RequestMethod.GET)
+	@RequestMapping(value = "/ticket/call")
 	@ResponseBody
-	public Integer call(@RequestParam Integer restaurantId,
-			@RequestParam Integer type, @RequestParam Integer customerId) {
-		Integer number = repository().updateCallTime(restaurantId, type);
+	public Integer call(@RequestParam Integer id, @RequestParam Integer type,
+			@RequestParam Integer customerId) {
+		Integer number = repository().updateCallTime(id, type);
 		if (number != 0) {
 			if (customerId != 0) {
 				Customer customer = customerRepository().find(customerId);
 				// send notification to customer's mobile device by regId
 			}
 			logger.info("Call Ticket " + (char) (type + 65) + number
-					+ " of Restaurant " + restaurantId);
+					+ " of Restaurant " + id);
 		} else
 			logger.info("Call " + (char) (type + 65)
-					+ " type ticket of Restaurant " + restaurantId
-					+ "unsuccessfully");
+					+ " type ticket of Restaurant " + id + "unsuccessfully");
 		return number;
 	}
 
-	@RequestMapping(value = "/ticket/remove", method = RequestMethod.GET)
+	@RequestMapping(value = "/ticket/remove")
 	@ResponseBody
 	public boolean remove(@RequestParam Integer customerId,
-			@RequestParam(required = false) Integer restaurantId,
+			@RequestParam(required = false) Integer id,
 			@RequestParam(required = false) Integer type,
 			@RequestParam(required = false) Integer number) {
 		boolean result;
 		if (customerId != 0)
 			result = repository().updateValidity(customerId) >= 1;
 		else
-			result = repository().updateValidity(restaurantId, type, number) == 1;
+			result = repository().updateValidity(id, type, number) == 1;
 		logger.info("Remove Ticket " + (char) (type + 65) + number
-				+ " of Restaurant " + restaurantId + ": " + result);
+				+ " of Restaurant " + id + ": " + result);
 		return result;
 	}
 
-	@RequestMapping(value = "/tickets", method = RequestMethod.GET)
+	@RequestMapping(value = "/tickets")
 	@ResponseBody
-	public List<Ticket> list(@RequestParam Integer restaurantId,
+	public List<Ticket> list(@RequestParam Integer id,
 			@RequestParam Integer type) {
-		List<Ticket> tickets = repository().findByType(restaurantId, type);
+		List<Ticket> tickets = repository().findByType(id, type);
 		logger.info("Return all " + tickets.size() + " valid "
-				+ (char) (type + 65) + " type tickets of Restaurant "
-				+ restaurantId);
+				+ (char) (type + 65) + " type tickets of Restaurant " + id);
 		return tickets;
 	}
 
 	@SuppressWarnings("deprecation")
-	public boolean record(@RequestParam Integer restaurantId) {
-		List<Ticket> tickets = repository().findByRestaurant(restaurantId);
+	public boolean record(Integer id) {
+		List<Ticket> tickets = repository().findByRestaurant(id);
 		int i, time, duration;
 		String str;
 		// File file = new File(restaurantId + ".arff");
@@ -159,9 +156,9 @@ public class TicketController {
 			// }
 			logger.info(str);
 		}
-		boolean result = repository().delete(restaurantId) == 0;
-		logger.info("Record and delete all tickets of Restaurant "
-				+ restaurantId + (result ? " successfully" : " unsuccessfully"));
+		boolean result = repository().delete(id) == 0;
+		logger.info("Record and delete all tickets of Restaurant " + id
+				+ (result ? " successfully" : " unsuccessfully"));
 		return result;
 	}
 }

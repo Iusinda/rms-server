@@ -46,15 +46,15 @@ public class RestaurantController {
 		return null;
 	}
 
-	@RequestMapping(value = "/restaurant", method = RequestMethod.GET)
+	@RequestMapping(value = "/restaurant")
 	@ResponseBody
-	public Restaurant info(@RequestParam Integer id) {
+	public Restaurant view(@RequestParam Integer id) {
 		Restaurant restaurant = repository().find(id);
 		logger.info("Return Restaurant {}", id);
 		return restaurant;
 	}
 
-	@RequestMapping(value = "/restaurant/edit", method = RequestMethod.POST)
+	@RequestMapping(value = "/restaurant/edit")
 	@ResponseBody
 	public boolean modify(@RequestParam Integer id,
 			@RequestParam Integer districtId, @RequestParam String name,
@@ -101,7 +101,7 @@ public class RestaurantController {
 		return result;
 	}
 
-	@RequestMapping(value = "/restaurants", method = RequestMethod.GET)
+	@RequestMapping(value = "/restaurants")
 	@ResponseBody
 	public List<Restaurant> listAll() {
 		List<Restaurant> restaurants = repository().findAll();
@@ -109,7 +109,7 @@ public class RestaurantController {
 		return restaurants;
 	}
 
-	@RequestMapping(value = "/restaurants", method = RequestMethod.POST)
+	@RequestMapping(value = "/restaurants", params = "areaId")
 	@ResponseBody
 	public List<Restaurant> list(@RequestParam Integer areaId,
 			@RequestParam Integer districtId, @RequestParam String name) {
