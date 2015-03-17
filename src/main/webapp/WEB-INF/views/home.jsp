@@ -28,7 +28,7 @@
 					if (data[i].callTime != null){
 						str += toTime(data[i].callTime);
 					}
-					str += "</td></tr>";
+					str += "</td><td><button>X</button></td></tr>";
 					$("#waitinglistbody").append(str);
 				}
 			}
@@ -112,7 +112,6 @@
 				data: {id: id, type: type, size: $("#add").val()},
 				cache: false,
 				success: function(data) {
-					$("#waitinglistbody").empty();
 					showTickets();
 				}
 			});
@@ -151,7 +150,7 @@
 					<th>Party Size</th>
 					<th>Get Time</th>
 					<th>Call Time</th>
-					<th></th>
+					<th><button>Clear All</button></th>
 				</tr>
 				<tbody id="waitinglistbody"></tbody>
 			</table>
