@@ -30,7 +30,7 @@ public class TicketTypeController {
 	@ResponseBody
 	public List<TicketType> list(@RequestParam Integer id) {
 		List<TicketType> ticketTypes = repository().findByRestaurant(id);
-		logger.info("Return all {} ticket type(s) of Restaurant {}", ticketTypes.size(), id);
+		logger.info("***** Return all {} ticket type(s) of Restaurant {}", ticketTypes.size(), id);
 		return ticketTypes;
 	}
 }

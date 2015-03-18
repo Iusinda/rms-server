@@ -58,11 +58,11 @@ public class TicketController {
 		Ticket ticket = repository().find(customerId);
 		if (ticket != null) {
 			updateEstimation(ticket);
-			logger.info("Return Ticket " + (char) (ticket.getType() + 65)
+			logger.info("***** Return Ticket " + (char) (ticket.getType() + 65)
 					+ ticket.getNumber() + " of Restaurant "
 					+ ticket.getRestaurantId() + " to Customer " + customerId);
 		} else
-			logger.info("Return no ticket to Customer " + customerId);
+			logger.info("***** Return no ticket to Customer " + customerId);
 		return ticket;
 	}
 
@@ -71,7 +71,7 @@ public class TicketController {
 	public Ticket preview(@RequestParam Integer id, @RequestParam Integer type) {
 		Ticket ticket = new Ticket(id, type);
 		performEstimation(ticket);
-		logger.info("Return preview of " + (char) (type + 65)
+		logger.info("***** Return preview of " + (char) (type + 65)
 				+ " type ticket of Restaurant " + id);
 		return ticket;
 	}
@@ -85,7 +85,7 @@ public class TicketController {
 		Ticket ticket = new Ticket(id, type, number, size, customerId);
 		performEstimation(ticket);
 		boolean result = repository().create(ticket) == 1;
-		logger.info("Dispense Ticket " + (char) (type + 65) + number
+		logger.info("***** Dispense Ticket " + (char) (type + 65) + number
 				+ " of Restaurant " + id
 				+ (result ? " successfully" : " unsuccessfully"));
 		return ticket;
@@ -93,34 +93,33 @@ public class TicketController {
 
 	@RequestMapping(value = "/ticket/call")
 	@ResponseBody
-	public Integer call(@RequestParam Integer id, @RequestParam Integer type,
-			@RequestParam Integer customerId) {
-		Integer number = repository().updateCallTime(id, type);
-		if (number != 0) {
-			if (customerId != 0) {
-				Customer customer = customerRepository().find(customerId);
+	public Integer call(@RequestParam Integer id, @RequestParam Integer type) {
+		Ticket ticket = repository().updateCallTime(id, type);
+		if (ticket != null) {
+			if (ticket.getCustomerId() != 0) {
+				Customer customer = customerRepository().find(ticket.getCustomerId());
 				// send notification to customer's mobile device by regId
 			}
-			logger.info("Call Ticket " + (char) (type + 65) + number
+			logger.info("***** Call Ticket " + (char) (type + 65) + ticket.getNumber()
 					+ " of Restaurant " + id);
 		} else
-			logger.info("Call " + (char) (type + 65)
+			logger.info("***** Call " + (char) (type + 65)
 					+ " type ticket of Restaurant " + id + "unsuccessfully");
-		return number;
+		return ticket.getNumber();
 	}
 
 	@RequestMapping(value = "/ticket/remove")
 	@ResponseBody
-	public boolean remove(@RequestParam Integer customerId,
+	public boolean remove(@RequestParam(required = false) Integer customerId,
 			@RequestParam(required = false) Integer id,
 			@RequestParam(required = false) Integer type,
 			@RequestParam(required = false) Integer number) {
 		boolean result;
-		if (customerId != 0)
+		if (customerId != null)
 			result = repository().updateValidity(customerId) >= 1;
 		else
 			result = repository().updateValidity(id, type, number) == 1;
-		logger.info("Remove Ticket " + (char) (type + 65) + number
+		logger.info("***** Remove Ticket " + (char) (type + 65) + number
 				+ " of Restaurant " + id + ": " + result);
 		return result;
 	}
@@ -130,7 +129,7 @@ public class TicketController {
 	public List<Ticket> list(@RequestParam Integer id,
 			@RequestParam Integer type) {
 		List<Ticket> tickets = repository().findByType(id, type);
-		logger.info("Return all " + tickets.size() + " valid "
+		logger.info("***** Return all " + tickets.size() + " valid "
 				+ (char) (type + 65) + " type tickets of Restaurant " + id);
 		return tickets;
 	}
@@ -157,7 +156,7 @@ public class TicketController {
 			logger.info(str);
 		}
 		boolean result = repository().delete(id) == 0;
-		logger.info("Record and delete all tickets of Restaurant " + id
+		logger.info("***** Record and delete all tickets of Restaurant " + id
 				+ (result ? " successfully" : " unsuccessfully"));
 		return result;
 	}

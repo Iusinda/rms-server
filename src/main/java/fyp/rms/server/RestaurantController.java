@@ -50,7 +50,7 @@ public class RestaurantController {
 	@ResponseBody
 	public Restaurant view(@RequestParam Integer id) {
 		Restaurant restaurant = repository().find(id);
-		logger.info("Return Restaurant {}", id);
+		logger.info("***** Return Restaurant {}", id);
 		return restaurant;
 	}
 
@@ -63,7 +63,7 @@ public class RestaurantController {
 		boolean result = (repository().update(
 				new Restaurant(id, districtId, name, address, phoneNo,
 						openingHours, description)) == 1);
-		logger.info("Modify info for Restaurant {}: {}", id, result);
+		logger.info("***** Modify info for Restaurant {}: {}", id, result);
 		return result;
 	}
 
@@ -72,7 +72,7 @@ public class RestaurantController {
 	public boolean login(@RequestParam Integer id, @RequestParam String password) {
 		boolean result = (repository().authenticate(id,
 				encode(password)) == 1);
-		logger.info("Login for Restaurant {}: {}", id, result);
+		logger.info("***** Login for Restaurant {}: {}", id, result);
 		return result;
 	}
 
@@ -86,7 +86,7 @@ public class RestaurantController {
 			return false;
 
 		boolean result = (repository().updateAvailability(id, status) == 1);
-		logger.info("Modify availability to " + status + " for Restaurant "
+		logger.info("***** Modify availability to " + status + " for Restaurant "
 				+ id + ": " + result);
 		return result;
 	}
@@ -97,7 +97,7 @@ public class RestaurantController {
 			@RequestParam String password, @RequestParam String newPassword) {
 		boolean result = (repository().updatePassword(id,
 				encode(password), encode(newPassword)) == 1);
-		logger.info("Modify password for Restaurant {}: {}", id, result);
+		logger.info("***** Modify password for Restaurant {}: {}", id, result);
 		return result;
 	}
 
@@ -105,7 +105,7 @@ public class RestaurantController {
 	@ResponseBody
 	public List<Restaurant> listAll() {
 		List<Restaurant> restaurants = repository().findAll();
-		logger.info("Return all {} available restaurant(s)", restaurants.size());
+		logger.info("***** Return all {} available restaurant(s)", restaurants.size());
 		return restaurants;
 	}
 
@@ -121,7 +121,7 @@ public class RestaurantController {
 			restaurants = repository().findByArea(areaId, name);
 		else
 			restaurants = repository().findByName(name);
-		logger.info("Return " + restaurants.size()
+		logger.info("***** Return " + restaurants.size()
 				+ " restaurant(s) of areaId = " + areaId + ", districtId = "
 				+ districtId + ", name = " + name);
 		return restaurants;

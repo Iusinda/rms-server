@@ -29,7 +29,7 @@ public class AreaController {
 	@ResponseBody
 	public List<Area> listAll() {
 		List<Area> areas = repository().findAll();
-		logger.info("Return all {} area(s)", areas.size());
+		logger.info("***** Return all {} area(s)", areas.size());
 		return areas;
 	}
 }

@@ -30,7 +30,7 @@ public class DistrictController {
 	@ResponseBody
 	public List<District> list(@RequestParam Integer areaId) {
 		List<District> districts = repository().findByArea(areaId);
-		logger.info("Return all {} district(s) in Area {}", districts.size(), areaId);
+		logger.info("***** Return all {} district(s) in Area {}", districts.size(), areaId);
 		return districts;
 	}
 }

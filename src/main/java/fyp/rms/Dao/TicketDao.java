@@ -26,7 +26,7 @@ public interface TicketDao {
 
 	public int findPosition(Integer restaurantId, Integer type, Integer number);
 
-	public int updateCallTime(Integer restaurantId, Integer type);
+	public Ticket updateCallTime(Integer restaurantId, Integer type);
 
 	public int updateValidity(Integer customerId);
 
