@@ -27,7 +27,7 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script>
-	var id = <%=id%>, type, number, refresh = false;
+	var id = <%=id%>, type, number, districtId, refresh = false;
 	function showTickets(){
 		$("#tickettable").empty();
 		$.ajax({
@@ -48,6 +48,19 @@
 						+ data[i].number + "'>X</button></td></tr>";
 					$("#tickettable").append(str);
 				}
+			}
+		});
+	}
+	
+	function showDistricts(select){
+		$.ajax({
+			url : "http://<%=request.getServerName()%>:7001/rms/districts",
+			data: {areaId: ($("#area")[0].selectedIndex + 1)},
+			success: function(data) {
+				$("#district").empty();
+				for (i = 0; i < data.length; i++)
+					$("#district").append("<option value='" + data[i].id + "'>" + data[i].name + "</option>");
+				if (select) $("#district option[value='" + districtId + "']").attr("selected", "selected");
 			}
 		});
 	}
@@ -146,21 +159,13 @@
 				data: {id: id},
 				cache: false,
 				success: function(data) {
+					districtId = data.districtId;
 					$.ajax({
 						url : "http://<%=request.getServerName()%>:7001/rms/district",
 						data: {districtId: data.districtId},
 						success: function(data) {
 							$("#area")[0].selectedIndex = data.areaId - 1;
-							$.ajax({
-								url : "http://<%=request.getServerName()%>:7001/rms/districts",
-								data: {areaId: data.areaId},
-								success: function(data) {
-									$("#district").empty();
-									for (i = 0; i < data.length; i++)
-										$("#district").append("<option>" + data[i].name + "</option>");
-									
-								}
-							});
+							showDistricts(true);
 						}
 					});
 				}
