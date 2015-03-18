@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%!
-	int id = 1;
+	int id = 2;
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -28,6 +28,25 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script>
 	var id = <%=id%>, type, number, districtId, refresh = false;
+	var date = new Date();
+	function toTime(timestamp){
+		date.setTime(timestamp);
+		return ("00" + date.getHours()).slice(-2) + ":" + ("00" + date.getMinutes()).slice(-2);
+	}
+	
+	function changeStatus(availability){ 
+		if (availability == false){
+			$("#distribute").val("true");
+			$("#distribute").text("Start");
+			$("#distribute").attr({"title" : "Start distributing tickets"});
+		}
+		else{
+			$("#distribute").val("false");
+			$("#distribute").text("Stop");
+			$("#distribute").attr({"title" : "Stop distributing tickets"});
+		}
+	}
+	
 	function showTickets(){
 		$("#tickettable").empty();
 		$.ajax({
@@ -65,23 +84,8 @@
 		});
 	}
 	
-	function changeStatus(availability){ 
-		if (availability == false){
-			$("#distribute").val("true");
-			$("#distribute").text("Start");
-			$("#distribute").attr({"title" : "Start distributing tickets"});
-		}
-		else{
-			$("#distribute").val("false");
-			$("#distribute").text("Stop");
-			$("#distribute").attr({"title" : "Stop distributing tickets"});
-		}
-	}
-	
-	var date = new Date();
-	function toTime(timestamp){
-		date.setTime(timestamp);
-		return ("00" + date.getHours()).slice(-2) + ":" + ("00" + date.getMinutes()).slice(-2);
+	function modifyRestaurant(){
+		alert(name);
 	}
 	
 	$(document).ready(function() {
@@ -108,6 +112,7 @@
 		
 		$(".content").hide();
 		
+		// Show Tickets
 		$("#show").on("click", "button", function(){
 			type = $(this).val();
 			$("h2").text($(this).text() + " Tickets");
@@ -130,55 +135,6 @@
 			$("#call").val($(this).val());
 			clearTimeout(refresh);
 			refresh = setInterval(function(){showTickets()}, 5000);
-		});
-		
-		$("#distribute").click(function(){
-			$.ajax({
-				url : "http://<%=request.getServerName()%>:7001/rms/restaurant/waitinglist",
-				data: {id: id, status: $("#distribute").val()},
-				cache: false,
-				success: function(data) {
-					if (data == true) changeStatus($("#distribute").val() == "true");
-				}
-			});
-		});
-		
-		$("#modifyRestaurant").click(function(){
-			$("h2").text("Restaurant Information");
-			$(".content").hide();
-			$.ajax({
-				url : "http://<%=request.getServerName()%>:7001/rms/areas",
-				success: function(data) {
-					$("#area").empty();
-					for (i = 0; i < data.length; i++)
-						$("#area").append("<option>" + data[i].name + "</option>");
-				}
-			});
-			$.ajax({
-				url : "http://<%=request.getServerName()%>:7001/rms/restaurant",
-				data: {id: id},
-				cache: false,
-				success: function(data) {
-					districtId = data.districtId;
-					$.ajax({
-						url : "http://<%=request.getServerName()%>:7001/rms/district",
-						data: {districtId: data.districtId},
-						success: function(data) {
-							$("#area")[0].selectedIndex = data.areaId - 1;
-							showDistricts(true);
-						}
-					});
-				}
-			});
-			$("#restaurant").show();
-			clearTimeout(refresh);
-		});
-		
-		$("#modifyAccount").click(function(){
-			$("h2").text("Account Information");
-			$(".content").hide();
-			$("#account").show();
-			clearTimeout(refresh);
 		});
 		
 		$("#add").hover(function(){
@@ -221,6 +177,68 @@
 				}
 			});
 		});
+		
+		$("#distribute").click(function(){
+			$.ajax({
+				url : "http://<%=request.getServerName()%>:7001/rms/restaurant/waitinglist",
+				data: {id: id, status: $("#distribute").val()},
+				cache: false,
+				success: function(data) {
+					if (data == true) changeStatus($("#distribute").val() == "true");
+				}
+			});
+		});
+		
+		// Modify Info: Restaurant
+		$("#modifyRestaurant").click(function(){
+			$("h2").text("Restaurant Information");
+			$(".content").hide();
+			$.ajax({
+				url : "http://<%=request.getServerName()%>:7001/rms/areas",
+				success: function(data) {
+					$("#area").empty();
+					for (i = 0; i < data.length; i++)
+						$("#area").append("<option>" + data[i].name + "</option>");
+				}
+			});
+			$.ajax({
+				url : "http://<%=request.getServerName()%>:7001/rms/restaurant",
+				data: {id: id},
+				cache: false,
+				success: function(data) {
+					districtId = data.districtId;
+					$.ajax({
+						url : "http://<%=request.getServerName()%>:7001/rms/district",
+						data: {districtId: data.districtId},
+						success: function(data) {
+							$("#area")[0].selectedIndex = data.areaId - 1;
+							showDistricts(true);
+						}
+					});
+					$("#name").val(data.name);
+					$("#phoneNo").val(data.phoneNo);
+					$("#openingHours").val(data.openingHours);
+					$("#address").val(data.address);
+					$("#description").val(data.description);
+				}
+			});
+			$("#restaurant").show();
+			clearTimeout(refresh);
+		});
+		
+		$("#area").change(function(){
+			showDistricts(false);
+		});
+		
+		// Modify Info: Account
+		$("#modifyAccount").click(function(){
+			$("h2").text("Account Information");
+			$(".content").hide();
+			$("#account").show();
+			clearTimeout(refresh);
+		});
+		
+		// Sign Out
 	});
 </script>
 </head>
@@ -248,20 +266,21 @@
 				<tbody id="tickettable"></tbody>
 			</table>
 		</div>
-		<div class="content" id="restaurant"><form>
+		<div class="content" id="restaurant"><form action="modifyRestaurant()">
 			<div class="fieldname">Name</div>
-			<input type="text" class="field" name="name"><br><br>
+			<input type="text" class="field" id="name" name="name"><br><br>
 			<div class="fieldname">Phone Number</div>
-			<input type="text" class="field" name="phoneNo"><br><br>
+			<input type="text" class="field" id="phoneNo" name="phoneNo"><br><br>
 			<div class="fieldname">Opening Hours</div>
-			<input type="text" class="field" name="openHours"><br><br>
+			<input type="text" class="field" id="openingHours" name="openingHours"><br><br>
 			<div class="fieldname">District</div>
-			<select id="area" class="shortfield" name="areaId"></select>&nbsp;&nbsp;
-			<select id="district" class="shortfield" name="districtId"></select><br><br>
+			<select class="shortfield" id="area" name="areaId"></select>&nbsp;&nbsp;
+			<select class="shortfield" id="district" name="districtId"></select><br><br>
 			<div class="fieldname">Address</div>
-			<input type="text" class="longfield" name="address"><br><br>
+			<input type="text" class="longfield" id="address" name="address"><br><br>
 			<div class="fieldname">Description</div>
-			<input type="text" class="longfield" name="description">
+			<input type="text" class="longfield" id="description" name="description"><br><br>
+			<input type="submit" value="Save Changes">
 		</form></div>
 		<div class="content" id="account">Account Details</div>
 	</div>
