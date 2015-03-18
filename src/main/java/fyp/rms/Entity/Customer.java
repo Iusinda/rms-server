@@ -5,6 +5,14 @@ public class Customer {
 	private Integer id;
 	private String regId;
 
+	public Customer(){
+	}
+
+	public Customer(Integer id, String regId){
+		this.id = id;
+		this.regId = regId;
+	}
+	
 	public Integer getId() {
 		return id;
 	}

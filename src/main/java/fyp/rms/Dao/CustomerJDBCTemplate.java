@@ -20,20 +20,19 @@ public class CustomerJDBCTemplate implements CustomerDao {
 	}
 
 	@Override
-	public int create(Customer customer) {
+	public Customer create(String regId) {
 		String SQL = "INSERT INTO rms.Customers (RegID) VALUES (?)";
-		jdbcTemplateObject.update(SQL, customer.getRegId());
+		jdbcTemplateObject.update(SQL, regId);
 
-		SQL = "SELECT LAST_INSERT_ID()";
-		return jdbcTemplateObject.queryForInt(SQL);
+		SQL = "SELECT * FROM rms.Customers ORDER BY id DESC LIMIT 1";
+		return jdbcTemplateObject.queryForObject(SQL, new CustomerMapper());
 	}
 
 	@Override
 	public Customer find(Integer id) {
 		String SQL = "SELECT * FROM rms.Customers WHERE ID = ?";
-		Customer customer = jdbcTemplateObject.queryForObject(SQL,
-				new Object[] { id }, new CustomerMapper());
-		return customer;
+		return jdbcTemplateObject.queryForObject(SQL, new Object[] { id },
+				new CustomerMapper());
 	}
 
 	@Override

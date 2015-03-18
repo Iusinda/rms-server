@@ -2,16 +2,32 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%!
-	int id = 2;
+	int id = 1;
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title id="title">RMS</title>
+<style>
+	.fieldname{
+  		display: inline-block;
+		width: 120px;
+	}
+	.shortfield{
+		width: 176px;
+	}
+	.field{
+		width: 360px;
+	}
+	.longfield{
+		height: 50px;
+		width: 360px;
+	}
+</style>
+<title>RMS</title>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script>
-	var id = <%=id%>, type, number;
+	var id = <%=id%>, type, number, refresh = false;
 	function showTickets(){
 		$("#tickettable").empty();
 		$.ajax({
@@ -28,7 +44,7 @@
 					if (data[i].callTime != null){
 						str += toTime(data[i].callTime);
 					}
-					str += "</td><td><button class='remove' value='"
+					str += "</td><td><button class='remove' title='Remove ticket' value='"
 						+ data[i].number + "'>X</button></td></tr>";
 					$("#tickettable").append(str);
 				}
@@ -99,6 +115,65 @@
 				}
 			});
 			$("#call").val($(this).val());
+			clearTimeout(refresh);
+			refresh = setInterval(function(){showTickets()}, 5000);
+		});
+		
+		$("#distribute").click(function(){
+			$.ajax({
+				url : "http://<%=request.getServerName()%>:7001/rms/restaurant/waitinglist",
+				data: {id: id, status: $("#distribute").val()},
+				cache: false,
+				success: function(data) {
+					if (data == true) changeStatus($("#distribute").val() == "true");
+				}
+			});
+		});
+		
+		$("#modifyRestaurant").click(function(){
+			$("h2").text("Restaurant Information");
+			$(".content").hide();
+			$.ajax({
+				url : "http://<%=request.getServerName()%>:7001/rms/areas",
+				success: function(data) {
+					$("#area").empty();
+					for (i = 0; i < data.length; i++)
+						$("#area").append("<option>" + data[i].name + "</option>");
+				}
+			});
+			$.ajax({
+				url : "http://<%=request.getServerName()%>:7001/rms/restaurant",
+				data: {id: id},
+				cache: false,
+				success: function(data) {
+					$.ajax({
+						url : "http://<%=request.getServerName()%>:7001/rms/district",
+						data: {districtId: data.districtId},
+						success: function(data) {
+							$("#area")[0].selectedIndex = data.areaId - 1;
+							$.ajax({
+								url : "http://<%=request.getServerName()%>:7001/rms/districts",
+								data: {areaId: data.areaId},
+								success: function(data) {
+									$("#district").empty();
+									for (i = 0; i < data.length; i++)
+										$("#district").append("<option>" + data[i].name + "</option>");
+									
+								}
+							});
+						}
+					});
+				}
+			});
+			$("#restaurant").show();
+			clearTimeout(refresh);
+		});
+		
+		$("#modifyAccount").click(function(){
+			$("h2").text("Account Information");
+			$(".content").hide();
+			$("#account").show();
+			clearTimeout(refresh);
 		});
 		
 		$("#add").hover(function(){
@@ -141,32 +216,21 @@
 				}
 			});
 		});
-		
-		$("#distribute").click(function(){
-			$.ajax({
-				url : "http://<%=request.getServerName()%>:7001/rms/restaurant/waitinglist",
-				data: {id: id, status: $("#distribute").val()},
-				cache: false,
-				success: function(data) {
-					if (data == true) changeStatus($("#distribute").val() == "true");
-				}
-			});
-		});
 	});
 </script>
 </head>
 
 <body>
 	<div id="menu">
-		<span id="show"><button disabled>Show Tickets</button></span>
-		<button disabled>Distribute Tickets</button><button id="distribute"></button>
-		<button disabled>Modify Info</button><button title="Modify restaurant information">Restaurant</button><button title="Modify account information">Account</button>
+		<span id="show"><button disabled>Show Tickets</button></span>&nbsp;&nbsp;&nbsp;
+		<button disabled>Distribute Tickets</button><button id="distribute"></button>&nbsp;&nbsp;&nbsp;
+		<button disabled>Modify Info</button><button id="modifyRestaurant" title="Modify restaurant information">Restaurant</button><button id="modifyAccount" title="Modify account information">Account</button>&nbsp;&nbsp;&nbsp;
 		<button>Sign Out</button>
 	</div>
 	<div>
 		<h2></h2>
 		<div class="content" id="tickets">
-			<select id="add" title="Add a new ticket" style="width:95px"></select>
+			<select id="add" title="Add a new ticket" style="width:95px"></select>&nbsp;&nbsp;&nbsp;
 			<button id="call" title="Call the next ticket">Call Ticket</button>
 			<table>
 				<tr>
@@ -179,6 +243,22 @@
 				<tbody id="tickettable"></tbody>
 			</table>
 		</div>
+		<div class="content" id="restaurant"><form>
+			<div class="fieldname">Name</div>
+			<input type="text" class="field" name="name"><br><br>
+			<div class="fieldname">Phone Number</div>
+			<input type="text" class="field" name="phoneNo"><br><br>
+			<div class="fieldname">Opening Hours</div>
+			<input type="text" class="field" name="openHours"><br><br>
+			<div class="fieldname">District</div>
+			<select id="area" class="shortfield" name="areaId"></select>&nbsp;&nbsp;
+			<select id="district" class="shortfield" name="districtId"></select><br><br>
+			<div class="fieldname">Address</div>
+			<input type="text" class="longfield" name="address"><br><br>
+			<div class="fieldname">Description</div>
+			<input type="text" class="longfield" name="description">
+		</form></div>
+		<div class="content" id="account">Account Details</div>
 	</div>
 </body>
 </html>

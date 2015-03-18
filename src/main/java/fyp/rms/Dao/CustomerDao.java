@@ -9,7 +9,7 @@ import fyp.rms.Entity.Customer;
 public interface CustomerDao {
 	public void setDataSource(DataSource ds);
 
-	public int create(Customer customer);
+	public Customer create(String regId);
 
 	public Customer find(Integer id);
 

@@ -95,18 +95,22 @@ public class TicketJDBCTemplate implements TicketDao {
 
 	@Override
 	public Ticket updateCallTime(Integer restaurantId, Integer type) {
-		String SQL = "SELECT * FROM rms.Tickets WHERE RestaurantID = ? AND Type = ? "
-				+ "AND Validity = TRUE AND CallTime IS NULL ORDER BY Number LIMIT 1";
-		Ticket ticket = jdbcTemplateObject.queryForObject(SQL, new Object[] {
-				restaurantId, type }, new TicketMapper());
-
-		SQL = "UPDATE rms.Tickets SET CallTime = NOW() "
-				+ "WHERE RestaurantID = ? AND Type = ? AND Number = ?";
-		if (jdbcTemplateObject.update(SQL, new Object[] { restaurantId, type,
-				ticket.getNumber() }) == 1)
-			return ticket;
-		else
+		try {
+			String SQL = "SELECT * FROM rms.Tickets WHERE RestaurantID = ? AND Type = ? "
+					+ "AND Validity = TRUE AND CallTime IS NULL ORDER BY Number LIMIT 1";
+			Ticket ticket = jdbcTemplateObject.queryForObject(SQL, new Object[] {
+					restaurantId, type }, new TicketMapper());
+	
+			SQL = "UPDATE rms.Tickets SET CallTime = NOW() "
+					+ "WHERE RestaurantID = ? AND Type = ? AND Number = ?";
+			if (jdbcTemplateObject.update(SQL, new Object[] { restaurantId, type,
+					ticket.getNumber() }) == 1)
+				return ticket;
+			else
+				return null;
+		} catch (EmptyResultDataAccessException e) {
 			return null;
+		}
 	}
 
 	@Override

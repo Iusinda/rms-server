@@ -31,7 +31,7 @@ public class DistrictJDBCTemplate implements DistrictDao {
 
 	@Override
 	public District find(Integer id) {
-		String SQL = "SELECT * FROM rms.Districts WHERE DistrictID = ?)";
+		String SQL = "SELECT * FROM rms.Districts WHERE ID = ?";
 		District district = jdbcTemplateObject.queryForObject(SQL,
 				new Object[] { id }, new DistrictMapper());
 		return district;

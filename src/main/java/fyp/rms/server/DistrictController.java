@@ -8,7 +8,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -25,6 +24,14 @@ public class DistrictController {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(DistrictController.class);
+
+	@RequestMapping(value = "/district")
+	@ResponseBody
+	public District view(@RequestParam Integer districtId) {
+		District district = repository().find(districtId);
+		logger.info("***** Return District {}", districtId);
+		return district;
+	}
 
 	@RequestMapping(value = "/districts")
 	@ResponseBody

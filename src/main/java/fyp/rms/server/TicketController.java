@@ -12,12 +12,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import fyp.rms.Dao.TicketJDBCTemplate;
-import fyp.rms.Dao.CustomerJDBCTemplate;
 import fyp.rms.Entity.Customer;
 import fyp.rms.Entity.Ticket;
 
@@ -27,12 +25,6 @@ public class TicketController {
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"jdbcConfig.xml");
 		return (TicketJDBCTemplate) context.getBean("TicketJDBCTemplate");
-	}
-
-	private CustomerJDBCTemplate customerRepository() {
-		ApplicationContext context = new ClassPathXmlApplicationContext(
-				"jdbcConfig.xml");
-		return (CustomerJDBCTemplate) context.getBean("CustomerJDBCTemplate");
 	}
 
 	private void performEstimation(Ticket ticket) {
@@ -97,15 +89,18 @@ public class TicketController {
 		Ticket ticket = repository().updateCallTime(id, type);
 		if (ticket != null) {
 			if (ticket.getCustomerId() != 0) {
-				Customer customer = customerRepository().find(ticket.getCustomerId());
+				Customer customer = (new CustomerController()).find(ticket.getCustomerId());
 				// send notification to customer's mobile device by regId
 			}
 			logger.info("***** Call Ticket " + (char) (type + 65) + ticket.getNumber()
-					+ " of Restaurant " + id);
-		} else
+					+ " of Restaurant " + id + " successfully");
+			return ticket.getNumber();
+		} else {
 			logger.info("***** Call " + (char) (type + 65)
-					+ " type ticket of Restaurant " + id + "unsuccessfully");
-		return ticket.getNumber();
+					+ " type ticket of Restaurant " + id + " unsuccessfully");
+			return 0;
+		}
+		
 	}
 
 	@RequestMapping(value = "/ticket/remove")
