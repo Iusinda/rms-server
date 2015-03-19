@@ -11,27 +11,32 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpSession;
+
 /**
  * Handles requests for the application home page.
  */
 @Controller
-public class HomeController {
+public class ViewController {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(HomeController.class);
+			.getLogger(ViewController.class);
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
+	public String logout(HttpSession session) {
+		if (session.getAttribute("id") != null)
+			return "home";
+		else
+			return "login";
 
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG,
-				DateFormat.LONG, locale);
+	}
 
-		String formattedDate = dateFormat.format(date);
-
-		model.addAttribute("serverTime", formattedDate);
-
-		return "home";
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String login(HttpSession session) {
+		logger.info("***** Return login page");
+		if (session.getAttribute("id") != null)
+			return "home";
+		else
+			return "login";
 	}
 }
