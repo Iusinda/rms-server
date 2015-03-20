@@ -1,15 +1,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%!
-	int id = 1;
-%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <style>
 	* {
 		text-align: center;
+	}
+	#menu{
 	}
 	#add, #call{
 		width: 120px;
@@ -45,14 +44,15 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script>
-	var id = <%=id%>, type, number, districtId, refresh = false;
+	var id = ${rid};
+	var type, number, districtId, refresh = false;
 	var date = new Date();
 	function toTime(timestamp){
 		date.setTime(timestamp);
 		return ("00" + date.getHours()).slice(-2) + ":" + ("00" + date.getMinutes()).slice(-2);
 	}
 	
-	function changeStatus(availability){ 
+	function showStatus(availability){ 
 		if (availability == false){
 			$("#distribute").val("true");
 			$("#distribute").text("Start");
@@ -68,7 +68,7 @@
 	function showTickets(){
 		$("#tickettable").empty();
 		$.ajax({
-			url : "http://<%=request.getServerName()%>:7001/rms/tickets",
+			url : "/rms/tickets",
 			data: {id: id, type: type},
 			cache: false,
 			success: function(data) {
@@ -91,7 +91,7 @@
 	
 	function showDistricts(select){
 		$.ajax({
-			url : "http://<%=request.getServerName()%>:7001/rms/districts",
+			url : "/rms/districts",
 			data: {areaId: ($("#areaId")[0].selectedIndex + 1)},
 			success: function(data) {
 				$("#districtId").empty();
@@ -102,13 +102,9 @@
 		});
 	}
 	
-	function modifyRestaurant(){
-		alert(name);
-	}
-	
 	$(document).ready(function() {
 		$.ajax({
-			url: "http://<%=request.getServerName()%>:7001/rms/tickettypes",
+			url: "/rms/tickettypes",
 			data: {id: id},
 			success: function(data) {
 				for (i = 0; i < data.length; i++)
@@ -119,11 +115,11 @@
 		});
 		
 		$.ajax({
-			url: "http://<%=request.getServerName()%>:7001/rms/restaurant",
+			url: "/rms/restaurant",
 			data: {id: id},
 			cache: false,
 			success: function(data) {
-				changeStatus(data.availability);
+				showStatus(data.availability);
 				$("h2").append("Welcome to the Reservation Management System for " + data.name + ".");
 			}
 		});
@@ -138,7 +134,7 @@
 			$(".content").hide();
 			$("#tickets").show();
 			$.ajax({
-				url : "http://<%=request.getServerName()%>:7001/rms/tickettypes",
+				url : "/rms/tickettypes",
 				data: {id: id},
 				cache: false,
 				success: function(data) {
@@ -162,7 +158,7 @@
 		
 		$("#add").change(function(){
 			$.ajax({
-				url : "http://<%=request.getServerName()%>:7001/rms/ticket/create",
+				url : "/rms/ticket/create",
 				data: {id: id, type: type, size: $("#add").val()},
 				cache: false,
 				success: function(data) {
@@ -174,7 +170,7 @@
 		
 		$("#call").click(function(){
 			$.ajax({
-				url : "http://<%=request.getServerName()%>:7001/rms/ticket/call",
+				url : "/rms/ticket/call",
 				data: {id: id, type: type},
 				cache: false,
 				success: function(data) {
@@ -186,7 +182,7 @@
 		$("#tickettable").on("click", ".remove button", function(){
 			number = $(this).val();
 			$.ajax({
-				url : "http://<%=request.getServerName()%>:7001/rms/ticket/remove",
+				url : "/rms/ticket/remove",
 				data: {id: id, type:type, number:number},
 				cache: false,
 				success: function(data) {
@@ -196,12 +192,15 @@
 		});
 		
 		$("#distribute").click(function(){
+			var reset = false;
+			if ($("#distribute").val() == "true")
+				reset = confirm("Would you like to reset Ticket Number? (All tickets will be recorded and cleared.)");
 			$.ajax({
-				url : "http://<%=request.getServerName()%>:7001/rms/restaurant/waitinglist",
-				data: {id: id, status: $("#distribute").val()},
+				url : "/rms/restaurant/waitinglist",
+				data: {id: id, status: $("#distribute").val(), reset: reset},
 				cache: false,
 				success: function(data) {
-					if (data == true) changeStatus($("#distribute").val() == "true");
+					if (data == true) showStatus($("#distribute").val() == "true");
 				}
 			});
 		});
@@ -209,7 +208,7 @@
 		// Modify Info: Restaurant
 		$("#modifyRestaurant").click(function(){
 			$.ajax({
-				url : "http://<%=request.getServerName()%>:7001/rms/areas",
+				url : "/rms/areas",
 				success: function(data) {
 					$("#areaId").empty();
 					for (i = 0; i < data.length; i++)
@@ -218,7 +217,7 @@
 			});		
 		
 			$.ajax({
-				url : "http://<%=request.getServerName()%>:7001/rms/restaurant",
+				url : "/rms/restaurant",
 				data: {id: id},
 				cache: false,
 				success: function(data) {
@@ -226,7 +225,7 @@
 					$("h2").text("Restaurant Information");
 					districtId = data.districtId;
 					$.ajax({
-						url : "http://<%=request.getServerName()%>:7001/rms/district",
+						url : "/rms/district",
 						data: {districtId: data.districtId},
 						success: function(data) {
 							$("#areaId")[0].selectedIndex = data.areaId - 1;
@@ -238,7 +237,7 @@
 					$("#openingHours").val(data.openingHours);
 					$("#address").val(data.address);
 					$("#description").val(data.description);
-					$("#submitRestaurant").val("Save Changes");
+					$("#restaurantMessage").html("");
 					$("#submitRestaurant").attr("disabled",true);
 					
 					$("#restaurant").show();
@@ -248,7 +247,6 @@
 		});
 		
 		$(".field").change(function(){
-			$("#submitRestaurant").val("Save Changes");
 			$("#submitRestaurant").attr("disabled",false);
 		});
 		
@@ -257,9 +255,12 @@
 		});
 		
 		$("#submitRestaurant").click(function(){
-			$.ajax({
+			if ($("#name").val() == ""){
+				$("#restaurantMessage").html("<br>Name cannot be empty.");
+				$("#restaurantMessage").css("color","red");
+			} else $.ajax({
   				type: 'POST',
-				url : "http://<%=request.getServerName()%>:7001/rms/restaurant/edit",
+				url : "/rms/restaurant/edit",
 				data: {
 					id: id,
 					name: $("#name").val(),
@@ -272,7 +273,8 @@
 				cache: false,
 				success: function(data) {
 					if (data == true){
-						$("#submitRestaurant").val("Saved Changes");
+						$("#restaurantMessage").html("<br>Changes are saved.");
+						$("#restaurantMessage").css("color","blue");
 						$("#submitRestaurant").attr("disabled",true); 
 					}
 				}
@@ -284,25 +286,26 @@
 			$("h2").text("Account Information");
 			$(".content").hide();
 			$("#account input").val("");
-			$("#submitAccount").val("Change Password");
+			$("#accountMessage").html("");
 			$("#submitAccount").attr("disabled",true); 
 			$("#account").show();
 			clearTimeout(refresh);
 		});
 		
 		$("#newPassword").change(function(){
-			$("#submitAccount").val("Change Password");
 			$("#submitAccount").attr("disabled",false); 
 		});
 		
 		$("#submitAccount").click(function(){
-			if ($("#newPassword").val() == "")
-				alert("Password cannot be empty.");
-			else if ($("#newPassword").val() != $("#newPassword2").val())
-				alert("Passwords do not match.");
-			else $.ajax({
+			if ($("#newPassword").val() == ""){
+				$("#accountMessage").html("<br>Password cannot be empty.");
+				$("#accountMessage").css("color","red");
+			} else if ($("#newPassword").val() != $("#newPassword2").val()){
+				$("#accountMessage").html("<br>Passwords do not match.");
+				$("#accountMessage").css("color","red");
+			} else $.ajax({
   				type: 'POST',
-				url : "http://<%=request.getServerName()%>:7001/rms/restaurant/password",
+				url : "/rms/restaurant/password",
 				data: {
 					id: id,
 					password: $("#password").val(),
@@ -311,15 +314,16 @@
 				cache: false,
 				success: function(data) {
 					if (data == true){
-						$("#submitAccount").val("Password Changed");
+						$("#accountMessage").html("<br>Password is changed.");
+						$("#accountMessage").css("color","blue");
 						$("#submitAccount").attr("disabled",true); 
-					} else
-						alert("Original password is incorrect.");
+					} else{
+						$("#accountMessage").html("<br>Original password is incorrect.");
+						$("#accountMessage").css("color","red");
+					}
 				}
 			});
 		});
-		
-		// Sign Out
 	});
 </script>
 </head>
@@ -329,9 +333,9 @@
 		<span id="show"><button disabled>Show Tickets</button></span>&nbsp;&nbsp;&nbsp;
 		<button disabled>Distribute Tickets</button><button id="distribute"></button>&nbsp;&nbsp;&nbsp;&nbsp;
 		<button disabled>Modify Info</button><button id="modifyRestaurant" title="Modify restaurant information">Restaurant</button><button id="modifyAccount" title="Modify account information">Account</button>&nbsp;&nbsp;&nbsp;
-		<button>Sign Out</button>
+		<a href="/rms/signin"><button>Sign Out</button></a><br>
 	</div>
-	<div><br>
+	<div>
 		<h2></h2>
 		<div class="content" id="tickets">
 			<select id="add" title="Add a new ticket"></select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -360,8 +364,9 @@
 			<div class="fieldname">Address</div>
 			<input type="text" class="long field" id="address"><br><br>
 			<div class="fieldname">Description</div>
-			<input type="text" class="long field" id="description"><br><br><br>
-			<input type="button" id="submitRestaurant"><br><br><br>
+			<input type="text" class="long field" id="description"><br><br>
+			<div id="restaurantMessage"></div>
+			<br><button id="submitRestaurant">Save Changes</button><br><br><br>
 		</div>
 		<div class="content" id="account"><br>
 			<div class="long fieldname">Old Password</div>
@@ -369,8 +374,9 @@
 			<div class="long fieldname">New Password</div>
 			<input type="password" class="short field" id="newPassword"><br><br>
 			<div class="long fieldname">Repeat New Password</div>
-			<input type="password" class="short field" id="newPassword2"><br><br><br>
-			<input type="button" id="submitAccount"><br><br><br>
+			<input type="password" class="short field" id="newPassword2"><br><br>
+			<div id="accountMessage"></div>
+			<br><button id="submitAccount">Change Password</button><br><br><br>
 		</div>
 	</div>
 </body>

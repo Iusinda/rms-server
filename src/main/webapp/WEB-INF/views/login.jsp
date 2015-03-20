@@ -10,43 +10,32 @@
 	}
 	.fieldname{
   		display: inline-block;
-		width: 70px;
+		width: 80px;
 		text-align: left;
 	}
 	.field{
 		width: 176px;
 		text-align: left;
 	}
+	#message{
+		color: red;
+	}
 	#submit{
 		width: 80px;
 	}
 </style>
-<title>RMS</title>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script>
-</script>
+<title>Sign in</title>
 </head>
 
 <body>
-        <%
-        String myname =  (String)session.getAttribute("username");
-        if(myname!=null)
-            out.println("Welcome  "+myname+"  , <a href=\"logout.jsp\" >Logout</a>");
-        else 
-            {
-            %>
-            <br><h3>Sign in to your RMS</h3><br>
-            
-            <form action="rms/restaurant/login" method="post">
-            	<div class="fieldname">User ID</div>
-				<input type="text" class="field" name="id"><br><br>
-	            <div class="fieldname">Password</div>
-				<input type="password" class="field" name="password"><br><br><br>
-                <input type="submit" id="submit" value="Sign in" /><br><br><br>
-            </form>
-            <% 
-            }
-            %>
+	<br><h3>Sign in to your RMS</h3><br>
+    <form action="/rms" method="post">
+		<div class="fieldname">User ID</div>
+		<input type="text" class="field" name="id"><br><br>
+        <div class="fieldname">Password</div>
+		<input type="password" class="field" name="password"><br><br>
+		<c:if test="${show}"><br><div id="message">${message}</div></c:if>
+        <br><input type="submit" id="submit" value="Sign in" /><br><br><br>
+    </form>
     </body>
 </html>

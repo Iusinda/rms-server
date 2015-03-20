@@ -110,12 +110,14 @@ public class TicketController {
 			@RequestParam(required = false) Integer type,
 			@RequestParam(required = false) Integer number) {
 		boolean result;
-		if (customerId != null)
+		if (customerId != null){
 			result = repository().updateValidity(customerId) >= 1;
-		else
+			logger.info("***** Remove ticket of Customer " + customerId + ": " + result);
+		} else{
 			result = repository().updateValidity(id, type, number) == 1;
-		logger.info("***** Remove Ticket " + (char) (type + 65) + number
-				+ " of Restaurant " + id + ": " + result);
+			logger.info("***** Remove Ticket " + (char) (type + 65) + number
+					+ " of Restaurant " + id + ": " + result);
+		}
 		return result;
 	}
 
@@ -134,7 +136,7 @@ public class TicketController {
 		List<Ticket> tickets = repository().findByRestaurant(id);
 		int i, time, duration;
 		String str;
-		// File file = new File(restaurantId + ".arff");
+//		File file = new File(id + ".arff");
 		for (i = 0; i < tickets.size(); i++) {
 			time = tickets.get(i).getGetTime().getHours() * 60
 					+ tickets.get(i).getGetTime().getMinutes();
@@ -143,12 +145,12 @@ public class TicketController {
 			str = tickets.get(i).getType() + ","
 					+ tickets.get(i).getGetTime().getDay() + "," + time + ","
 					+ tickets.get(i).getPosition() + "," + duration + "\n";
-			// try {
-			// FileUtils.writeStringToFile(file, str + "\n", true);
-			// } catch (IOException e) {
-			// e.printStackTrace();
-			// }
-			logger.info(str);
+//			try {
+//				FileUtils.writeStringToFile(file, str + "\n", true);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+			logger.info("***** " + str);
 		}
 		boolean result = repository().delete(id) == 0;
 		logger.info("***** Record and delete all tickets of Restaurant " + id

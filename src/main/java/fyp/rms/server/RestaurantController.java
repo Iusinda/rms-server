@@ -67,15 +67,6 @@ public class RestaurantController {
 		return result;
 	}
 
-	@RequestMapping(value = "/restaurant/login", method = RequestMethod.POST)
-	@ResponseBody
-	public boolean login(@RequestParam Integer id, @RequestParam String password) {
-		boolean result = (repository().authenticate(id,
-				encode(password)) == 1);
-		logger.info("***** Login for Restaurant {}: {}", id, result);
-		return result;
-	}
-
 	@RequestMapping(value = "/restaurant/waitinglist")
 	@ResponseBody
 	public boolean modifyAvailability(
@@ -125,5 +116,12 @@ public class RestaurantController {
 				+ " restaurant(s) of areaId = " + areaId + ", districtId = "
 				+ districtId + ", name = " + name);
 		return restaurants;
+	}
+
+	public boolean login(Integer id, String password) {
+		boolean result = (repository().authenticate(id,
+				encode(password)) == 1);
+		logger.info("***** Login for Restaurant {}: {}", id, result);
+		return result;
 	}
 }
