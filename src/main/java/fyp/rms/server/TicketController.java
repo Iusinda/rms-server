@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import fyp.rms.Dao.TicketJDBCTemplate;
 import fyp.rms.Entity.Customer;
 import fyp.rms.Entity.Ticket;
+import fyp.rms.utility.GCMHelper;
 
 @Controller
 public class TicketController {
@@ -87,10 +88,16 @@ public class TicketController {
 	@ResponseBody
 	public Integer call(@RequestParam Integer id, @RequestParam Integer type) {
 		Ticket ticket = repository().updateCallTime(id, type);
-		if (ticket != null) {
+		  if (ticket != null) {
+		 
 			if (ticket.getCustomerId() != 0) {
 				Customer customer = (new CustomerController()).find(ticket.getCustomerId());
 				// send notification to customer's mobile device by regId
+				String regId = customer.getRegId();
+				logger.info("Calling customer with regID :" + regId);
+				String message = "The seat will be ready soon.";
+				GCMHelper gcmHelper = new GCMHelper(message,regId);
+				gcmHelper.sendMessage();						
 			}
 			logger.info("***** Call Ticket " + (char) (type + 65) + ticket.getNumber()
 					+ " of Restaurant " + id + " successfully");
@@ -100,6 +107,7 @@ public class TicketController {
 					+ " type ticket of Restaurant " + id + " unsuccessfully");
 			return 0;
 		}
+		
 		
 	}
 
