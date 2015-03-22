@@ -32,7 +32,7 @@ public class AreaController {
 			fyp.rms.utility.WekaTest.main(arg);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.info("Please put the input file inside " + System.getProperty("user.dir"));
 		}
 		
 		
