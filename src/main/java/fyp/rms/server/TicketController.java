@@ -59,6 +59,23 @@ public class TicketController {
 		return ticket;
 	}
 
+	@RequestMapping(value = "/ticket")
+	@ResponseBody
+	public Ticket test() {
+		Ticket ticket = new Ticket();
+		
+		String[] arg = null;
+		try {
+			fyp.rms.utility.WekaTest.main(arg);
+			logger.info("***** Testing on Ticket");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			logger.info("Please put the input file inside "
+					+ System.getProperty("user.dir"));
+		}
+		return ticket;
+	}
+
 	@RequestMapping(value = "/ticket", params = "id")
 	@ResponseBody
 	public Ticket preview(@RequestParam Integer id, @RequestParam Integer type) {

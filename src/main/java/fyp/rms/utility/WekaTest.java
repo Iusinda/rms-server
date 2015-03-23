@@ -20,7 +20,7 @@ import weka.core.Instances;
 
 public class WekaTest {
 	private static final Logger logger = LoggerFactory
-			.getLogger(AreaController.class);
+			.getLogger(WekaTest.class);
 
 	public static BufferedReader readDataFile(String filename) {
 		BufferedReader inputReader = null;

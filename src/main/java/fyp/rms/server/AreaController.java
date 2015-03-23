@@ -27,15 +27,6 @@ public class AreaController {
 	@RequestMapping(value = "/areas")
 	@ResponseBody
 	public List<Area> listAll() {
-		String[] arg = null;
-		try {
-			fyp.rms.utility.WekaTest.main(arg);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			logger.info("Please put the input file inside " + System.getProperty("user.dir"));
-		}
-		
-		
 		List<Area> areas = repository().findAll();
 		logger.info("***** Return all {} area(s)", areas.size());
 		return areas;
