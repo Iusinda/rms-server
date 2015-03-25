@@ -61,20 +61,20 @@ public class TicketController {
 
 	@RequestMapping(value = "/ticket")
 	@ResponseBody
-	public Ticket test() {
-		Ticket ticket = new Ticket();
-
+	public boolean test() {
 		try {
-			fyp.rms.utility.WekaTest.demo();
-//			fyp.rms.utility.ExperimentDemo.demo("weka.classifiers.trees.M5P",
-//					10, 10, "test-weather.txt", "test-result.txt");
+			// fyp.rms.utility.WekaTest.demo();
+			fyp.rms.utility.ExperimentDemo.demo(10, 10,
+					"C:\\Users\\Lusinda\\Desktop\\data.arff",
+					"C:\\Users\\Lusinda\\Desktop\\result.arff");
+			return true;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			logger.info("Error: " + e);
-//			logger.info("Please put the input file inside "
-//					+ System.getProperty("user.dir"));
+			// logger.info("Please put the input file inside "
+			// + System.getProperty("user.dir"));
+			return false;
 		}
-		return ticket;
 	}
 
 	@RequestMapping(value = "/ticket", params = "id")

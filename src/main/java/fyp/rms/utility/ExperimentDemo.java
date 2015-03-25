@@ -1,7 +1,7 @@
 package fyp.rms.utility;
 
 import weka.classifiers.Classifier;
-import weka.classifiers.trees.M5P;
+import weka.classifiers.trees.REPTree;
 import weka.core.Instances;
 import weka.core.Range;
 import weka.core.Utils;
@@ -26,8 +26,26 @@ import java.io.FileReader;
 
 import javax.swing.DefaultListModel;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+/*
+ *    This program is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 2 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this program; if not, write to the Free Software
+ *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+
+/*
+ * ExperimentDemo.java
+ * Copyright (C) 2007 University of Waikato, Hamilton, New Zealand
+ */
 
 /**
  * A class for demonstrating the use of the Experiment class for one classifier
@@ -38,14 +56,12 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$
  */
 public class ExperimentDemo {
-	private static final Logger logger = LoggerFactory
-			.getLogger(ExperimentDemo.class);
 
 	/**
 	 * Expects the following parameters:
 	 * <ul>
 	 * <li>-classifier "classifier incl. parameters"</li>
-	 * <li>-exptype "regression"</li>
+	 * <li>-exptype "classification|regression"</li>
 	 * <li>-splittype "crossvalidation|randomsplit"</li>
 	 * <li>-runs "# of runs"</li>
 	 * <li>-folds "# of cross-validation folds"</li>
@@ -59,11 +75,10 @@ public class ExperimentDemo {
 	 * @throws Exception
 	 *             if something goes wrong
 	 */
-	public static void demo(String classifier, Integer folds, Integer runs,
-			String input, String output) throws Exception {
-
+	public static void demo(Integer folds, Integer runs, String input,
+			String output) throws Exception {
 		// 1. setup the experiment
-		logger.info("Setting up...");
+		System.out.println("Setting up...");
 		Experiment exp = new Experiment();
 		exp.setPropertyArray(new Classifier[0]);
 		exp.setUsePropertyIterator(true);
@@ -90,59 +105,71 @@ public class ExperimentDemo {
 		exp.setPropertyPath(propertyPath);
 
 		// runs
-		logger.info("Set upper limit of Runs: " + classifier);
 		exp.setRunLower(1);
 		exp.setRunUpper(runs);
 
 		// classifier
-		logger.info("Set Classifier: " + classifier);
-		String[] classifiers = Utils.splitOptions(classifier);
-		String classname = classifiers[0];
-		classifiers[0] = "";
-		Classifier c = new M5P();
-		exp.setPropertyArray(new Classifier[] { c });
+		exp.setPropertyArray(new Classifier[] { new REPTree() });
 
 		// datasets
-		logger.info("Set Input: " + input);
+		boolean data = false;
 		DefaultListModel model = new DefaultListModel();
 		File file = new File(input);
 		if (!file.exists())
 			throw new IllegalArgumentException("File '" + input
 					+ "' does not exist!");
+		data = true;
 		model.addElement(file);
+		if (!data)
+			throw new IllegalArgumentException("No data files provided!");
 		exp.setDatasets(model);
 
 		// result
-		logger.info("Set Output: " + output);
 		InstancesResultListener irl = new InstancesResultListener();
 		irl.setOutputFile(new File(output));
 		exp.setResultListener(irl);
 
 		// 2. run experiment
-		logger.info("Initializing...");
+		System.out.println("Initializing...");
 		exp.initialize();
-		logger.info("Running...");
+		System.out.println("Running...");
 		exp.runExperiment();
-		logger.info("Finishing...");
+		System.out.println("Finishing...");
 		exp.postProcess();
 
 		// 3. calculate statistics and output them
-		logger.info("Evaluating...");
+		System.out.println("Evaluating...");
 		PairedTTester tester = new PairedCorrectedTTester();
 		Instances result = new Instances(new BufferedReader(new FileReader(
 				irl.getOutputFile())));
 		tester.setInstances(result);
 		tester.setSortColumn(-1);
 		tester.setRunColumn(result.attribute("Key_Run").index());
+		tester.setResultsetKeyColumns(new Range(""
+				+ (result.attribute("Key_Dataset").index() + 1)));
+		tester.setDatasetKeyColumns(new Range(""
+				+ (result.attribute("Key_Scheme").index() + 1) + ","
+				+ (result.attribute("Key_Scheme_options").index() + 1) + ","
+				+ (result.attribute("Key_Scheme_version_ID").index() + 1)));
+		tester.setResultMatrix(new ResultMatrixPlainText());
+		tester.setDisplayedResultsets(null);
+		tester.setSignificanceLevel(0.05);
+		tester.setShowStdDevs(true);
+		// fill result matrix (but discarding the output)
 		tester.multiResultsetFull(0, result
 				.attribute("Correlation_coefficient").index());
 		// output results for reach dataset
-		logger.info("****** Result:");
+		System.out.println("\nResult:");
 		ResultMatrix matrix = tester.getResultMatrix();
 		for (int i = 0; i < matrix.getColCount(); i++) {
-			logger.info(matrix.getColName(i));
-			logger.info("    Perc. correct: " + matrix.getMean(i, 0));
-			logger.info("    StdDev: " + matrix.getStdDev(i, 0));
+			System.out.println(matrix.getColName(i));
+			System.out.println("    Perc. correct: " + matrix.getMean(i, 0));
+			System.out.println("    StdDev: " + matrix.getStdDev(i, 0));
 		}
+	}
+
+	public static void main(String[] args) throws Exception {
+		demo(10, 10, "C:\\Users\\Lusinda\\Desktop\\data.arff",
+				"C:\\Users\\Lusinda\\Desktop\\result.arff");
 	}
 }
