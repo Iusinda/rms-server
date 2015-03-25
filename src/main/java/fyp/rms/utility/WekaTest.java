@@ -7,14 +7,16 @@ import java.io.FileReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fyp.rms.server.AreaController;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.evaluation.NominalPrediction;
+import weka.classifiers.evaluation.NumericPrediction;
 import weka.classifiers.rules.DecisionTable;
 import weka.classifiers.rules.PART;
 import weka.classifiers.trees.DecisionStump;
 import weka.classifiers.trees.J48;
+import weka.classifiers.trees.M5P;
+import weka.classifiers.trees.REPTree;
 import weka.core.FastVector;
 import weka.core.Instances;
 
@@ -48,7 +50,10 @@ public class WekaTest {
 		double correct = 0;
 
 		for (int i = 0; i < predictions.size(); i++) {
-			NominalPrediction np = (NominalPrediction) predictions.elementAt(i);
+			NumericPrediction np = (NumericPrediction) predictions.elementAt(i);
+
+			logger.info(i + ". " + "Predict = " + np.predicted() + ", "
+					+ "Actual = " + np.actual());
 			if (np.predicted() == np.actual()) {
 				correct++;
 			}
@@ -69,8 +74,8 @@ public class WekaTest {
 		return split;
 	}
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader datafile = readDataFile("weather.txt");
+	public static void demo() throws Exception {
+		BufferedReader datafile = readDataFile("test-dining.arff");
 
 		Instances data = new Instances(datafile);
 		data.setClassIndex(data.numAttributes() - 1);
@@ -83,11 +88,7 @@ public class WekaTest {
 		Instances[] testingSplits = split[1];
 
 		// Use a set of classifiers
-		Classifier[] models = { new J48(), // a decision tree
-				new PART(), new DecisionTable(),// decision table majority
-												// classifier
-				new DecisionStump() // one-level decision tree
-		};
+		Classifier[] models = { new REPTree() };
 
 		// Run for each model
 		for (int j = 0; j < models.length; j++) {

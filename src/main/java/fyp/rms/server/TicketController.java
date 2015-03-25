@@ -63,15 +63,16 @@ public class TicketController {
 	@ResponseBody
 	public Ticket test() {
 		Ticket ticket = new Ticket();
-		
-		String[] arg = null;
+
 		try {
-			fyp.rms.utility.WekaTest.main(arg);
-			logger.info("***** Testing on Ticket");
+			fyp.rms.utility.WekaTest.demo();
+//			fyp.rms.utility.ExperimentDemo.demo("weka.classifiers.trees.M5P",
+//					10, 10, "test-weather.txt", "test-result.txt");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			logger.info("Please put the input file inside "
-					+ System.getProperty("user.dir"));
+			logger.info("Error: " + e);
+//			logger.info("Please put the input file inside "
+//					+ System.getProperty("user.dir"));
 		}
 		return ticket;
 	}
@@ -105,27 +106,28 @@ public class TicketController {
 	@ResponseBody
 	public Integer call(@RequestParam Integer id, @RequestParam Integer type) {
 		Ticket ticket = repository().updateCallTime(id, type);
-		  if (ticket != null) {
-		 
+		if (ticket != null) {
+
 			if (ticket.getCustomerId() != 0) {
-				Customer customer = (new CustomerController()).find(ticket.getCustomerId());
+				Customer customer = (new CustomerController()).find(ticket
+						.getCustomerId());
 				// send notification to customer's mobile device by regId
 				String regId = customer.getRegId();
 				logger.info("Calling customer with regID :" + regId);
 				String message = "The seat will be ready soon.";
-				GCMHelper gcmHelper = new GCMHelper(message,regId);
-				gcmHelper.sendMessage();						
+				GCMHelper gcmHelper = new GCMHelper(message, regId);
+				gcmHelper.sendMessage();
 			}
-			logger.info("***** Call Ticket " + (char) (type + 65) + ticket.getNumber()
-					+ " of Restaurant " + id + " successfully");
+			logger.info("***** Call Ticket " + (char) (type + 65)
+					+ ticket.getNumber() + " of Restaurant " + id
+					+ " successfully");
 			return ticket.getNumber();
 		} else {
 			logger.info("***** Call " + (char) (type + 65)
 					+ " type ticket of Restaurant " + id + " unsuccessfully");
 			return 0;
 		}
-		
-		
+
 	}
 
 	@RequestMapping(value = "/ticket/remove")
@@ -135,10 +137,11 @@ public class TicketController {
 			@RequestParam(required = false) Integer type,
 			@RequestParam(required = false) Integer number) {
 		boolean result;
-		if (customerId != null){
+		if (customerId != null) {
 			result = repository().updateValidity(customerId) >= 1;
-			logger.info("***** Remove ticket of Customer " + customerId + ": " + result);
-		} else{
+			logger.info("***** Remove ticket of Customer " + customerId + ": "
+					+ result);
+		} else {
 			result = repository().updateValidity(id, type, number) == 1;
 			logger.info("***** Remove Ticket " + (char) (type + 65) + number
 					+ " of Restaurant " + id + ": " + result);
@@ -161,7 +164,7 @@ public class TicketController {
 		List<Ticket> tickets = repository().findByRestaurant(id);
 		int i, time, duration;
 		String str;
-//		File file = new File(id + ".arff");
+		// File file = new File(id + ".arff");
 		for (i = 0; i < tickets.size(); i++) {
 			time = tickets.get(i).getGetTime().getHours() * 60
 					+ tickets.get(i).getGetTime().getMinutes();
@@ -170,11 +173,11 @@ public class TicketController {
 			str = tickets.get(i).getType() + ","
 					+ tickets.get(i).getGetTime().getDay() + "," + time + ","
 					+ tickets.get(i).getPosition() + "," + duration + "\n";
-//			try {
-//				FileUtils.writeStringToFile(file, str + "\n", true);
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
+			// try {
+			// FileUtils.writeStringToFile(file, str + "\n", true);
+			// } catch (IOException e) {
+			// e.printStackTrace();
+			// }
 			logger.info("***** " + str);
 		}
 		boolean result = repository().delete(id) == 0;

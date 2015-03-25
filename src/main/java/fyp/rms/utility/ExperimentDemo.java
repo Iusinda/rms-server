@@ -1,6 +1,7 @@
 package fyp.rms.utility;
 
 import weka.classifiers.Classifier;
+import weka.classifiers.trees.M5P;
 import weka.core.Instances;
 import weka.core.Range;
 import weka.core.Utils;
@@ -58,9 +59,8 @@ public class ExperimentDemo {
 	 * @throws Exception
 	 *             if something goes wrong
 	 */
-	public static void demo(String[] classifier, String splittype,
-			Integer folds, Integer runs, String input, String output)
-			throws Exception {
+	public static void demo(String classifier, Integer folds, Integer runs,
+			String input, String output) throws Exception {
 
 		// 1. setup the experiment
 		logger.info("Setting up...");
@@ -73,71 +73,47 @@ public class ExperimentDemo {
 		Classifier sec = ((RegressionSplitEvaluator) se).getClassifier();
 
 		// crossvalidation or randomsplit
-		if (splittype.equals("crossvalidation")) {
-			CrossValidationResultProducer cvrp = new CrossValidationResultProducer();
-			cvrp.setNumFolds(folds);
-			cvrp.setSplitEvaluator(se);
-
-			PropertyNode[] propertyPath = new PropertyNode[2];
-			try {
-				propertyPath[0] = new PropertyNode(se, new PropertyDescriptor(
-						"splitEvaluator", CrossValidationResultProducer.class),
-						CrossValidationResultProducer.class);
-				propertyPath[1] = new PropertyNode(sec, new PropertyDescriptor(
-						"classifier", se.getClass()), se.getClass());
-			} catch (IntrospectionException e) {
-				e.printStackTrace();
-			}
-
-			exp.setResultProducer(cvrp);
-			exp.setPropertyPath(propertyPath);
-
-		} else if (splittype.equals("randomsplit")) {
-			RandomSplitResultProducer rsrp = new RandomSplitResultProducer();
-			rsrp.setRandomizeData(true);
-			Double persentage = folds * 1.0;
-			rsrp.setTrainPercent(persentage);
-			rsrp.setSplitEvaluator(se);
-
-			PropertyNode[] propertyPath = new PropertyNode[2];
-			try {
-				propertyPath[0] = new PropertyNode(se, new PropertyDescriptor(
-						"splitEvaluator", RandomSplitResultProducer.class),
-						RandomSplitResultProducer.class);
-				propertyPath[1] = new PropertyNode(sec, new PropertyDescriptor(
-						"classifier", se.getClass()), se.getClass());
-			} catch (IntrospectionException e) {
-				e.printStackTrace();
-			}
-
-			exp.setResultProducer(rsrp);
-			exp.setPropertyPath(propertyPath);
+		CrossValidationResultProducer cvrp = new CrossValidationResultProducer();
+		cvrp.setNumFolds(folds);
+		cvrp.setSplitEvaluator(se);
+		PropertyNode[] propertyPath = new PropertyNode[2];
+		try {
+			propertyPath[0] = new PropertyNode(se, new PropertyDescriptor(
+					"splitEvaluator", CrossValidationResultProducer.class),
+					CrossValidationResultProducer.class);
+			propertyPath[1] = new PropertyNode(sec, new PropertyDescriptor(
+					"classifier", se.getClass()), se.getClass());
+		} catch (IntrospectionException e) {
+			e.printStackTrace();
 		}
+		exp.setResultProducer(cvrp);
+		exp.setPropertyPath(propertyPath);
 
 		// runs
+		logger.info("Set upper limit of Runs: " + classifier);
 		exp.setRunLower(1);
 		exp.setRunUpper(runs);
 
 		// classifier
-		String classname = classifier[0];
-		classifier[0] = "";
-		Classifier c = (Classifier) Utils.forName(Classifier.class, classname,
-				classifier);
+		logger.info("Set Classifier: " + classifier);
+		String[] classifiers = Utils.splitOptions(classifier);
+		String classname = classifiers[0];
+		classifiers[0] = "";
+		Classifier c = new M5P();
 		exp.setPropertyArray(new Classifier[] { c });
 
 		// datasets
+		logger.info("Set Input: " + input);
 		DefaultListModel model = new DefaultListModel();
-		if (input.length() > 0) {
-			File file = new File(input);
-			if (!file.exists())
-				throw new IllegalArgumentException("File '" + input
-						+ "' does not exist!");
-			model.addElement(file);
-		} else
-			throw new IllegalArgumentException("No data files provided!");
+		File file = new File(input);
+		if (!file.exists())
+			throw new IllegalArgumentException("File '" + input
+					+ "' does not exist!");
+		model.addElement(file);
 		exp.setDatasets(model);
 
 		// result
+		logger.info("Set Output: " + output);
 		InstancesResultListener irl = new InstancesResultListener();
 		irl.setOutputFile(new File(output));
 		exp.setResultListener(irl);
