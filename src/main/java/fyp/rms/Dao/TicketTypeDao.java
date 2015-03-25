@@ -1,6 +1,7 @@
-package fyp.rms.Dao;
+package fyp.rms.dao;
 
 import java.util.List;
+
 
 
 /*
@@ -10,7 +11,7 @@ import java.util.List;
  * */
 import javax.sql.DataSource;
 
-import fyp.rms.Entity.TicketType;
+import fyp.rms.entity.TicketType;
 
 public interface TicketTypeDao {
 

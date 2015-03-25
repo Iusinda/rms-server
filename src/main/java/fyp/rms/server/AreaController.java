@@ -10,8 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import fyp.rms.Dao.AreaJDBCTemplate;
-import fyp.rms.Entity.Area;
+import fyp.rms.dao.AreaJDBCTemplate;
+import fyp.rms.entity.Area;
 
 @Controller
 public class AreaController {

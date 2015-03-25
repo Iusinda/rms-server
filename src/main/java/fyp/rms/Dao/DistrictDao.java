@@ -1,10 +1,10 @@
-package fyp.rms.Dao;
+package fyp.rms.dao;
 
 import java.util.List;
 
 import javax.sql.DataSource;
 
-import fyp.rms.Entity.District;
+import fyp.rms.entity.District;
 
 public interface DistrictDao {
 	public void setDataSource(DataSource ds);

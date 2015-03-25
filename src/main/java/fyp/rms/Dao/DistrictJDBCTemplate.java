@@ -1,4 +1,4 @@
-package fyp.rms.Dao;
+package fyp.rms.dao;
 
 import java.util.List;
 
@@ -6,8 +6,8 @@ import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import fyp.rms.Entity.District;
-import fyp.rms.Mapper.DistrictMapper;
+import fyp.rms.entity.District;
+import fyp.rms.mapper.DistrictMapper;
 
 public class DistrictJDBCTemplate implements DistrictDao {
 	private DataSource dataSource;

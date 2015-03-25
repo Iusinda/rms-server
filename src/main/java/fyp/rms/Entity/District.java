@@ -1,4 +1,4 @@
-package fyp.rms.Entity;
+package fyp.rms.entity;
 
 public class District {
 	// id is auto-generated value

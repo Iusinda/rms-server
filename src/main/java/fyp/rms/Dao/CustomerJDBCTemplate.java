@@ -1,4 +1,4 @@
-package fyp.rms.Dao;
+package fyp.rms.dao;
 
 import java.util.List;
 
@@ -6,8 +6,8 @@ import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import fyp.rms.Entity.Customer;
-import fyp.rms.Mapper.CustomerMapper;
+import fyp.rms.entity.Customer;
+import fyp.rms.mapper.CustomerMapper;
 
 public class CustomerJDBCTemplate implements CustomerDao {
 	private DataSource dataSource;

@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import fyp.rms.Dao.RestaurantJDBCTemplate;
-import fyp.rms.Entity.Restaurant;
+import fyp.rms.dao.RestaurantJDBCTemplate;
+import fyp.rms.entity.Restaurant;
 
 @Controller
 public class RestaurantController {

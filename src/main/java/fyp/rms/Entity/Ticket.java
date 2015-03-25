@@ -1,4 +1,4 @@
-package fyp.rms.Entity;
+package fyp.rms.entity;
 
 import java.sql.Timestamp;
 

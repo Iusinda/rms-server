@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import fyp.rms.Dao.TicketJDBCTemplate;
-import fyp.rms.Entity.Customer;
-import fyp.rms.Entity.Ticket;
+import fyp.rms.dao.TicketJDBCTemplate;
+import fyp.rms.entity.Customer;
+import fyp.rms.entity.Ticket;
 import fyp.rms.utility.GCMHelper;
 
 @Controller
@@ -61,19 +61,19 @@ public class TicketController {
 
 	@RequestMapping(value = "/ticket")
 	@ResponseBody
-	public boolean test() {
+	public int test() {
 		try {
-			// fyp.rms.utility.WekaTest.demo();
-			fyp.rms.utility.ExperimentDemo.demo(10, 10,
-					"C:\\Users\\Lusinda\\Desktop\\data.arff",
-					"C:\\Users\\Lusinda\\Desktop\\result.arff");
-			return true;
+//			fyp.rms.utility.WekaTest.demo();
+//			fyp.rms.utility.ExperimentDemo.demo(10, 10,
+//					"C:\\Users\\Lusinda\\Desktop\\data.arff",
+//					"C:\\Users\\Lusinda\\Desktop\\result.arff");
+			return fyp.rms.utility.MLHelper.a;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			logger.info("Error: " + e);
 			// logger.info("Please put the input file inside "
 			// + System.getProperty("user.dir"));
-			return false;
+			return 0;
 		}
 	}
 

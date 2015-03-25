@@ -1,4 +1,4 @@
-package fyp.rms.Dao;
+package fyp.rms.dao;
 
 import java.util.List;
 
@@ -6,8 +6,8 @@ import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import fyp.rms.Entity.Area;
-import fyp.rms.Mapper.AreaMapper;
+import fyp.rms.entity.Area;
+import fyp.rms.mapper.AreaMapper;
 
 public class AreaJDBCTemplate implements AreaDao {
 	private DataSource dataSource;

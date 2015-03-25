@@ -1,4 +1,4 @@
-package fyp.rms.Dao;
+package fyp.rms.dao;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import javax.sql.DataSource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import fyp.rms.Entity.Ticket;
-import fyp.rms.Mapper.TicketMapper;
+import fyp.rms.entity.Ticket;
+import fyp.rms.mapper.TicketMapper;
 
 public class TicketJDBCTemplate implements TicketDao {
 	private DataSource dataSource;

@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import fyp.rms.Dao.TicketTypeJDBCTemplate;
-import fyp.rms.Entity.TicketType;
+import fyp.rms.dao.TicketTypeJDBCTemplate;
+import fyp.rms.entity.TicketType;
 
 @Controller
 public class TicketTypeController {

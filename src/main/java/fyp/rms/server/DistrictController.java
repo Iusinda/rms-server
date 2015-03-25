@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import fyp.rms.Dao.DistrictJDBCTemplate;
-import fyp.rms.Entity.District;
+import fyp.rms.dao.DistrictJDBCTemplate;
+import fyp.rms.entity.District;
 
 @Controller
 public class DistrictController {

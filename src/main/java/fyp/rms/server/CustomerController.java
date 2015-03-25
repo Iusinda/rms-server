@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import fyp.rms.Dao.CustomerJDBCTemplate;
-import fyp.rms.Entity.Customer;
+import fyp.rms.dao.CustomerJDBCTemplate;
+import fyp.rms.entity.Customer;
 
 @Controller
 public class CustomerController {

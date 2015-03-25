@@ -1,4 +1,4 @@
-package fyp.rms.Dao;
+package fyp.rms.dao;
 
 import java.util.List;
 
@@ -6,9 +6,9 @@ import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import fyp.rms.Entity.Restaurant;
-import fyp.rms.Mapper.RestaurantMapper;
-import fyp.rms.Mapper.SimpleRestaurantMapper;
+import fyp.rms.entity.Restaurant;
+import fyp.rms.mapper.RestaurantMapper;
+import fyp.rms.mapper.SimpleRestaurantMapper;
 
 public class RestaurantJDBCTemplate implements RestaurantDAO {
 	private DataSource dataSource;

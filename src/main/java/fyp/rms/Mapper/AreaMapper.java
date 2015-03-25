@@ -1,12 +1,12 @@
-package fyp.rms.Mapper;
+package fyp.rms.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import fyp.rms.Entity.Area;
-import fyp.rms.Entity.Customer;
+import fyp.rms.entity.Area;
+import fyp.rms.entity.Customer;
 
 public class AreaMapper implements RowMapper<Area> {
 	public Area mapRow(ResultSet rs, int rowNum) throws SQLException {

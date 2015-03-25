@@ -1,10 +1,10 @@
-package fyp.rms.Dao;
+package fyp.rms.dao;
 
 import java.util.List;
 
 import javax.sql.DataSource;
 
-import fyp.rms.Entity.Customer;
+import fyp.rms.entity.Customer;
 
 public interface CustomerDao {
 	public void setDataSource(DataSource ds);

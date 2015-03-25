@@ -1,11 +1,11 @@
-package fyp.rms.Mapper;
+package fyp.rms.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import fyp.rms.Entity.Ticket;
+import fyp.rms.entity.Ticket;
 
 public class TicketMapper implements RowMapper<Ticket> {
 	public Ticket mapRow(ResultSet rs, int rowNum) throws SQLException {

@@ -1,4 +1,4 @@
-package fyp.rms.Dao;
+package fyp.rms.dao;
 
 import java.util.List;
 
@@ -6,8 +6,8 @@ import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import fyp.rms.Entity.TicketType;
-import fyp.rms.Mapper.TicketTypeMapper;
+import fyp.rms.entity.TicketType;
+import fyp.rms.mapper.TicketTypeMapper;
 
 public class TicketTypeJDBCTemplate implements TicketTypeDao {
 	private DataSource dataSource;

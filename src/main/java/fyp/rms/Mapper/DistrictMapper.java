@@ -1,11 +1,11 @@
-package fyp.rms.Mapper;
+package fyp.rms.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import fyp.rms.Entity.District;
+import fyp.rms.entity.District;
 
 public class DistrictMapper implements RowMapper<District> {
 	public District mapRow(ResultSet rs, int rowNum) throws SQLException {
