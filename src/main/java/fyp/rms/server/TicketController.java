@@ -19,6 +19,7 @@ import fyp.rms.dao.TicketJDBCTemplate;
 import fyp.rms.entity.Customer;
 import fyp.rms.entity.Ticket;
 import fyp.rms.utility.GCMHelper;
+import fyp.rms.utility.MLHelper;
 
 @Controller
 public class TicketController {
@@ -63,11 +64,15 @@ public class TicketController {
 	@ResponseBody
 	public void test() {
 		try {
-//			fyp.rms.utility.WekaTest.demo();
-//			fyp.rms.utility.ExperimentDemo.demo(10, 10,
-//					"C:\\Users\\Lusinda\\Desktop\\data.arff",
-//					"C:\\Users\\Lusinda\\Desktop\\result.arff");
-			//fyp.rms.utility.MLHelper.test();
+			// fyp.rms.utility.WekaTest.demo();
+			// fyp.rms.utility.ExperimentDemo.demo(10, 10,
+			// "C:\\Users\\Lusinda\\Desktop\\data.arff",
+			// "C:\\Users\\Lusinda\\Desktop\\result.arff");
+			// fyp.rms.utility.MLHelper.test();
+			MLHelper.initialize();
+			MLHelper ml = new MLHelper(2);
+			Integer duration = ml.estimate(1, 1, 1223, 26);
+			System.out.println("duration: " + duration);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			logger.info("Error: " + e);

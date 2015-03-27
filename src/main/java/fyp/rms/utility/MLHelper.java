@@ -37,10 +37,9 @@ public class MLHelper {
 				"data/" + id + ".arff")));
 		dataset.setClassIndex(dataset.numAttributes() - 1);
 		tree = new REPTree();
-		tree.buildClassifier(emptyset);
-		System.out.println(tree);
+		System.out.println("\n***** 1st tree *****\n" + tree);
 		tree.buildClassifier(dataset);
-		System.out.println(tree);
+		System.out.println("\n***** 2nd tree *****\n" + tree);
 		// Random rand = new Random(System.currentTimeMillis());
 		// int folds = 10;
 		// Instances randData = new Instances(data);
