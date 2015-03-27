@@ -61,19 +61,18 @@ public class TicketController {
 
 	@RequestMapping(value = "/ticket")
 	@ResponseBody
-	public int test() {
+	public void test() {
 		try {
 //			fyp.rms.utility.WekaTest.demo();
 //			fyp.rms.utility.ExperimentDemo.demo(10, 10,
 //					"C:\\Users\\Lusinda\\Desktop\\data.arff",
 //					"C:\\Users\\Lusinda\\Desktop\\result.arff");
-			return fyp.rms.utility.MLHelper.a;
+			//fyp.rms.utility.MLHelper.test();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			logger.info("Error: " + e);
 			// logger.info("Please put the input file inside "
 			// + System.getProperty("user.dir"));
-			return 0;
 		}
 	}
 

@@ -3,41 +3,59 @@ package fyp.rms.utility;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+import weka.core.Attribute;
 import weka.core.Debug.Random;
+import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.classifiers.trees.REPTree;
 
 public class MLHelper {
-	private static int test(){
-		System.out.println("*******************************************OMG");
-		return 1;
+	private static Instances emptyset;
+
+	public static void initialize() {
+		FastVector attributes = new FastVector(5);
+		attributes.addElement(new Attribute("type"));
+		attributes.addElement(new Attribute("day"));
+		attributes.addElement(new Attribute("time"));
+		attributes.addElement(new Attribute("position"));
+		attributes.addElement(new Attribute("duration"));
+		emptyset = new Instances("dining", attributes, 0);
+		emptyset.setClassIndex(emptyset.numAttributes() - 1);
 	}
-	
-	public static int a = test();
-	
-	public static void main(String args[]) throws Exception {
-		// load data
-		Instances data = new Instances(
-				new BufferedReader(
-						new FileReader(
-								"/Users/lohris/programming/FYP/Dev/testingworkplace/weka/dining4.arff")));
-		data.setClassIndex(data.numAttributes() - 1);
-		// build model
-		Random rand = new Random(System.currentTimeMillis());
-		int folds = 10;
-		Instances randData = new Instances(data);
-		randData.randomize(rand);
-		randData.stratify(folds);
-		REPTree repTree = new REPTree();
-		repTree.buildClassifier(data);
 
-		// System.out.println(repTree);
-		// classify the last instance
-		Instance myHouse = data.lastInstance();
-		repTree.classifyInstance(myHouse);
+	private Integer id;
+	private REPTree tree;
 
-		System.out.println(repTree);
+	public MLHelper(Integer id) throws Exception {
+		this.id = id;
+		build();
+	}
 
+	public void build() throws Exception {
+		Instances dataset = new Instances(new BufferedReader(new FileReader(
+				"data/" + id + ".arff")));
+		dataset.setClassIndex(dataset.numAttributes() - 1);
+		tree = new REPTree();
+		tree.buildClassifier(emptyset);
+		System.out.println(tree);
+		tree.buildClassifier(dataset);
+		System.out.println(tree);
+		// Random rand = new Random(System.currentTimeMillis());
+		// int folds = 10;
+		// Instances randData = new Instances(data);
+		// randData.randomize(rand);
+		// randData.stratify(folds);
+	}
+
+	public Integer estimate(Integer type, Integer day, Integer time,
+			Integer position) throws Exception {
+		Instance ticket = new Instance(5);
+		ticket.setValue(0, type);
+		ticket.setValue(1, day);
+		ticket.setValue(2, time);
+		ticket.setValue(3, position);
+		ticket.setDataset(emptyset);
+		return (int) tree.classifyInstance(ticket);
 	}
 }
