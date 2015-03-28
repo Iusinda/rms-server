@@ -21,7 +21,6 @@ public class MLModel {
 		} catch (Exception e) {
 			System.out.println("Model for Restaurant " + id + " is not built.");
 		}
-		System.out.println("Built model for Restaurant " + id);
 	}
 
 	public void build() throws Exception {
@@ -29,6 +28,7 @@ public class MLModel {
 				"data/" + id + ".arff")));
 		dataset.setClassIndex(dataset.numAttributes() - 1);
 		tree.buildClassifier(dataset);
+		System.out.println("Model for Restaurant " + id + ":");
 		System.out.println(tree);
 		// Random rand = new Random(System.currentTimeMillis());
 		// int folds = 10;

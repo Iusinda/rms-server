@@ -63,13 +63,7 @@ public class TicketController {
 	@RequestMapping(value = "/ticket")
 	@ResponseBody
 	public void test() {
-		// fyp.rms.utility.WekaTest.demo();
-		// fyp.rms.utility.ExperimentDemo.demo(10, 10,
-		// "C:\\Users\\Lusinda\\Desktop\\data.arff",
-		// "C:\\Users\\Lusinda\\Desktop\\result.arff");
-		// fyp.rms.utility.MLHelper.test();
-		MLHelper.initialize();
-		Integer duration = MLHelper.calculate(2, 1, 1, 1223, 26);
+		Integer duration = (new MLHelper()).calculate(2, 1, 1, 1223, 26);
 		System.out.println("duration: " + duration);
 	}
 
@@ -160,7 +154,7 @@ public class TicketController {
 		List<Ticket> tickets = repository().findByRestaurant(id);
 		int i, time, duration;
 		String str;
-		// File file = new File(id + ".arff");
+		File file = new File("data/" + id + ".arff");
 		for (i = 0; i < tickets.size(); i++) {
 			time = tickets.get(i).getGetTime().getHours() * 60
 					+ tickets.get(i).getGetTime().getMinutes();
@@ -169,11 +163,11 @@ public class TicketController {
 			str = tickets.get(i).getType() + ","
 					+ tickets.get(i).getGetTime().getDay() + "," + time + ","
 					+ tickets.get(i).getPosition() + "," + duration + "\n";
-			// try {
-			// FileUtils.writeStringToFile(file, str + "\n", true);
-			// } catch (IOException e) {
-			// e.printStackTrace();
-			// }
+			try {
+				FileUtils.writeStringToFile(file, str + "\n", true);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			logger.info("***** " + str);
 		}
 		boolean result = repository().delete(id) == 0;
