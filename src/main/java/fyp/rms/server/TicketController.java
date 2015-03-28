@@ -63,22 +63,14 @@ public class TicketController {
 	@RequestMapping(value = "/ticket")
 	@ResponseBody
 	public void test() {
-		try {
-			// fyp.rms.utility.WekaTest.demo();
-			// fyp.rms.utility.ExperimentDemo.demo(10, 10,
-			// "C:\\Users\\Lusinda\\Desktop\\data.arff",
-			// "C:\\Users\\Lusinda\\Desktop\\result.arff");
-			// fyp.rms.utility.MLHelper.test();
-			MLHelper.initialize();
-			MLHelper ml = new MLHelper(2);
-			Integer duration = ml.estimate(1, 1, 1223, 26);
-			System.out.println("duration: " + duration);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			logger.info("Error: " + e);
-			// logger.info("Please put the input file inside "
-			// + System.getProperty("user.dir"));
-		}
+		// fyp.rms.utility.WekaTest.demo();
+		// fyp.rms.utility.ExperimentDemo.demo(10, 10,
+		// "C:\\Users\\Lusinda\\Desktop\\data.arff",
+		// "C:\\Users\\Lusinda\\Desktop\\result.arff");
+		// fyp.rms.utility.MLHelper.test();
+		MLHelper.initialize();
+		Integer duration = MLHelper.calculate(2, 1, 1, 1223, 26);
+		System.out.println("duration: " + duration);
 	}
 
 	@RequestMapping(value = "/ticket", params = "id")
