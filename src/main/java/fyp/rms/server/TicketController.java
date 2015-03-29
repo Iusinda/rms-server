@@ -1,8 +1,12 @@
 package fyp.rms.server;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -33,7 +37,16 @@ public class TicketController {
 		ticket.setPosition(repository().findPosition(ticket.getRestaurantId(),
 				ticket.getType()) + 1);
 		// machine learning
-		ticket.setDuration(ticket.getPosition());
+		Calendar time = Calendar.getInstance();
+		Integer duration = (new MLHelper())
+				.calculate(
+						ticket.getRestaurantId(),
+						ticket.getType(),
+						time.get(Calendar.DAY_OF_WEEK) - 1,
+						time.get(Calendar.HOUR_OF_DAY) * 60
+								+ time.get(Calendar.MINUTE),
+						ticket.getPosition());
+		ticket.setDuration(duration);
 	}
 
 	private void updateEstimation(Ticket ticket) {
@@ -149,27 +162,31 @@ public class TicketController {
 		return tickets;
 	}
 
-	@SuppressWarnings("deprecation")
 	public boolean record(Integer id) {
 		List<Ticket> tickets = repository().findByRestaurant(id);
-		int i, time, duration;
-		String str;
-		File file = new File("data/" + id + ".arff");
-		for (i = 0; i < tickets.size(); i++) {
-			time = tickets.get(i).getGetTime().getHours() * 60
-					+ tickets.get(i).getGetTime().getMinutes();
-			duration = (int) (tickets.get(i).getCallTime().getTime() - tickets
-					.get(i).getGetTime().getTime()) / 60000;
-			str = tickets.get(i).getType() + ","
-					+ tickets.get(i).getGetTime().getDay() + "," + time + ","
-					+ tickets.get(i).getPosition() + "," + duration + "\n";
-			try {
-				FileUtils.writeStringToFile(file, str + "\n", true);
-			} catch (IOException e) {
-				e.printStackTrace();
+		Calendar getTime = Calendar.getInstance();
+		try {
+			PrintWriter file = new PrintWriter(new BufferedWriter(
+					new FileWriter("data/" + id + ".arff", true)));
+			for (int i = 0; i < tickets.size(); i++) {
+				getTime.setTime(tickets.get(i).getGetTime());
+				int time = getTime.get(Calendar.HOUR_OF_DAY) * 60
+						+ getTime.get(Calendar.MINUTE);
+				int duration = (int) (tickets.get(i).getCallTime().getTime() - tickets
+						.get(i).getGetTime().getTime()) / 60000;
+				String str = tickets.get(i).getType() + ","
+						+ (getTime.get(Calendar.DAY_OF_WEEK) - 1) + "," + time
+						+ "," + tickets.get(i).getPosition() + "," + duration;
+				file.println(str);
+				logger.info("***** " + str);
 			}
-			logger.info("***** " + str);
+			file.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+
+		// File file = new File("data/" + id + ".arff");
+		// FileUtils.writeStringToFile(file, str + "\n", true);
 		boolean result = repository().delete(id) == 0;
 		logger.info("***** Record and delete all tickets of Restaurant " + id
 				+ (result ? " successfully" : " unsuccessfully"));

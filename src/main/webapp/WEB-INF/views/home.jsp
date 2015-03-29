@@ -191,6 +191,7 @@
 			});
 		});
 		
+		// Distribute Tickets
 		$("#distribute").click(function(){
 			var reset = false;
 			if ($("#distribute").val() == "true")
