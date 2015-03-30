@@ -3,6 +3,10 @@ package fyp.rms.utility;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import fyp.rms.server.TicketController;
 import weka.classifiers.trees.REPTree;
 import weka.core.Attribute;
 import weka.core.FastVector;
@@ -12,6 +16,8 @@ import weka.core.Instances;
 public class MLModel {
 	private Integer id;
 	private REPTree tree;
+	private static final Logger logger = LoggerFactory
+			.getLogger(TicketController.class);
 
 	public MLModel(Integer id) {
 		this.id = id;
@@ -19,7 +25,7 @@ public class MLModel {
 		try {
 			build();
 		} catch (Exception e) {
-			System.out.println("Model for Restaurant " + id + " is not built.");
+			logger.info("Model for Restaurant " + id + " is not built.");
 		}
 	}
 
@@ -28,8 +34,7 @@ public class MLModel {
 				"data/" + id + ".arff")));
 		dataset.setClassIndex(dataset.numAttributes() - 1);
 		tree.buildClassifier(dataset);
-		System.out.println("Model for Restaurant " + id + ":");
-		System.out.println(tree);
+		logger.info("Model for Restaurant " + id + ":" + tree);
 		// Random rand = new Random(System.currentTimeMillis());
 		// int folds = 10;
 		// Instances randData = new Instances(data);

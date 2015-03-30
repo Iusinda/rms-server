@@ -1,24 +1,13 @@
 package fyp.rms.server;
 
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.Locale;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 
-/**
- * Handles requests for the application home page.
- */
 @Controller
 @RequestMapping("/")
 public class ViewController {
@@ -29,7 +18,7 @@ public class ViewController {
 		else
 			return "login";
 	}
-	
+
 	@RequestMapping(value = "/signin")
 	public String logout(HttpSession session) {
 		session.removeAttribute("rid");
@@ -39,7 +28,7 @@ public class ViewController {
 	@RequestMapping(method = RequestMethod.POST, params = "id")
 	public String login(HttpSession session, ModelMap model,
 			@RequestParam String id, @RequestParam String password) {
-		try{
+		try {
 			Integer idInt = Integer.parseInt(id);
 			if ((new RestaurantController()).login(idInt, password)) {
 				session.setAttribute("rid", id);
@@ -47,9 +36,9 @@ public class ViewController {
 			} else {
 				model.addAttribute("message", "Incorrect User ID or Password.");
 			}
-		} catch (Exception e){
+		} catch (Exception e) {
 			model.addAttribute("message", "User ID should be an integer.");
-		} 
+		}
 		model.addAttribute("show", true);
 		return "login";
 	}

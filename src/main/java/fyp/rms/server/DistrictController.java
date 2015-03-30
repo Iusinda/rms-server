@@ -16,20 +16,20 @@ import fyp.rms.entity.District;
 
 @Controller
 public class DistrictController {
+	private static final Logger logger = LoggerFactory
+			.getLogger(DistrictController.class);
+
 	private DistrictJDBCTemplate repository() {
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"jdbcConfig.xml");
 		return (DistrictJDBCTemplate) context.getBean("DistrictJDBCTemplate");
 	}
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(DistrictController.class);
-
 	@RequestMapping(value = "/district")
 	@ResponseBody
 	public District view(@RequestParam Integer districtId) {
 		District district = repository().find(districtId);
-		logger.info("***** Return District {}", districtId);
+		logger.info("Return District {}", districtId);
 		return district;
 	}
 
@@ -37,7 +37,8 @@ public class DistrictController {
 	@ResponseBody
 	public List<District> list(@RequestParam Integer areaId) {
 		List<District> districts = repository().findByArea(areaId);
-		logger.info("***** Return all {} district(s) in Area {}", districts.size(), areaId);
+		logger.info("Return all {} district(s) in Area {}",
+				districts.size(), areaId);
 		return districts;
 	}
 }

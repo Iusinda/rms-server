@@ -16,20 +16,22 @@ import fyp.rms.entity.TicketType;
 
 @Controller
 public class TicketTypeController {
+	private static final Logger logger = LoggerFactory
+			.getLogger(TicketTypeController.class);
+
 	private TicketTypeJDBCTemplate repository() {
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"jdbcConfig.xml");
-		return (TicketTypeJDBCTemplate) context.getBean("TicketTypeJDBCTemplate");
+		return (TicketTypeJDBCTemplate) context
+				.getBean("TicketTypeJDBCTemplate");
 	}
-
-	private static final Logger logger = LoggerFactory
-			.getLogger(TicketTypeController.class);
 
 	@RequestMapping(value = "/tickettypes")
 	@ResponseBody
 	public List<TicketType> list(@RequestParam Integer id) {
 		List<TicketType> ticketTypes = repository().findByRestaurant(id);
-		logger.info("***** Return all {} ticket type(s) of Restaurant {}", ticketTypes.size(), id);
+		logger.info("Return all {} ticket type(s) of Restaurant {}",
+				ticketTypes.size(), id);
 		return ticketTypes;
 	}
 }

@@ -1,8 +1,5 @@
 package fyp.rms.utility;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,11 +7,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import weka.core.Attribute;
-import weka.core.Debug.Random;
 import weka.core.FastVector;
-import weka.core.Instance;
 import weka.core.Instances;
-import weka.classifiers.trees.REPTree;
 
 public class MLHelper implements ServletContextListener {
 	private static List<MLModel> models;

@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import fyp.rms.entity.Area;
-import fyp.rms.entity.Customer;
 
 public class AreaMapper implements RowMapper<Area> {
 	public Area mapRow(ResultSet rs, int rowNum) throws SQLException {

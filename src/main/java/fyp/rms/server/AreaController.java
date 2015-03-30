@@ -15,20 +15,20 @@ import fyp.rms.entity.Area;
 
 @Controller
 public class AreaController {
+	private static final Logger logger = LoggerFactory
+			.getLogger(AreaController.class);
+
 	private AreaJDBCTemplate repository() {
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"jdbcConfig.xml");
 		return (AreaJDBCTemplate) context.getBean("AreaJDBCTemplate");
 	}
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(AreaController.class);
-
 	@RequestMapping(value = "/areas")
 	@ResponseBody
 	public List<Area> listAll() {
 		List<Area> areas = repository().findAll();
-		logger.info("***** Return all {} area(s)", areas.size());
+		logger.info("Return all {} area(s)", areas.size());
 		return areas;
 	}
 }
