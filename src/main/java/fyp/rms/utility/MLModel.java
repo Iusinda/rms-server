@@ -8,8 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import fyp.rms.server.TicketController;
 import weka.classifiers.trees.REPTree;
-import weka.core.Attribute;
-import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
 

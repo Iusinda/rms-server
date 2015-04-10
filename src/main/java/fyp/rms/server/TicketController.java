@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import fyp.rms.dao.TicketJDBCTemplate;
+import fyp.rms.dao.HolidayJDBCTemplate;
 import fyp.rms.entity.Customer;
 import fyp.rms.entity.Ticket;
 import fyp.rms.utility.GCMHelper;
@@ -33,17 +34,29 @@ public class TicketController {
 		return (TicketJDBCTemplate) context.getBean("TicketJDBCTemplate");
 	}
 
+	private Integer getDayOfWeek(Calendar date) {
+//		ApplicationContext context = new ClassPathXmlApplicationContext(
+//				"jdbcConfig.xml");
+//		HolidayJDBCTemplate holidayRepository = (HolidayJDBCTemplate) context
+//				.getBean("HolidayJDBCTemplate");
+//		// For holiday: treat as Sunday
+//		if (holidayRepository.find(date) == 1)
+//			return 0;
+//		// For the day before holiday: treat as Friday
+//		date.add(Calendar.DATE, 1);
+//		if (holidayRepository.find(date) == 1)
+//			return 5;
+		return date.get(Calendar.DAY_OF_WEEK) - 1;
+	}
+
 	private void performEstimation(Ticket ticket) {
 		ticket.setPosition(repository().findPosition(ticket.getRestaurantId(),
 				ticket.getType()) + 1);
 		// machine learning
 		Calendar time = Calendar.getInstance();
 		Integer duration = (new MLHelper())
-				.calculate(
-						ticket.getRestaurantId(),
-						ticket.getType(),
-						time.get(Calendar.DAY_OF_WEEK) - 1,
-						time.get(Calendar.HOUR_OF_DAY) * 60
+				.calculate(ticket.getRestaurantId(), ticket.getType(),
+						getDayOfWeek(time), time.get(Calendar.HOUR_OF_DAY) * 60
 								+ time.get(Calendar.MINUTE),
 						ticket.getPosition());
 		ticket.setDuration(duration);
@@ -172,8 +185,8 @@ public class TicketController {
 				int duration = (int) (tickets.get(i).getCallTime().getTime() - tickets
 						.get(i).getGetTime().getTime()) / 60000;
 				String str = tickets.get(i).getType() + ","
-						+ (getTime.get(Calendar.DAY_OF_WEEK) - 1) + "," + time
-						+ "," + tickets.get(i).getPosition() + "," + duration;
+						+ getDayOfWeek(getTime) + "," + time + ","
+						+ tickets.get(i).getPosition() + "," + duration;
 				file.println(str);
 				logger.info("" + str);
 			}

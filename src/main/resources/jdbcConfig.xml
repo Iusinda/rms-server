@@ -32,5 +32,8 @@
 	<bean id="TicketTypeJDBCTemplate" class="fyp.rms.dao.TicketTypeJDBCTemplate">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+	<bean id="HolidayJDBCTemplate" class="fyp.rms.dao.HolidayJDBCTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
 
 </beans>

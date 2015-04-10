@@ -57,8 +57,9 @@ public class RestaurantJDBCTemplate implements RestaurantDAO {
 		name = "%" + name + "%";
 		String SQL = "SELECT * FROM rms.Restaurants"
 				+ " WHERE Availability = TRUE AND DistrictID = ? AND Name LIKE ?";
-		List<Restaurant> restaurants = jdbcTemplateObject.query(SQL,
-				new Object[] { districtId, name }, new SimpleRestaurantMapper());
+		List<Restaurant> restaurants = jdbcTemplateObject
+				.query(SQL, new Object[] { districtId, name },
+						new SimpleRestaurantMapper());
 		return restaurants;
 	}
 

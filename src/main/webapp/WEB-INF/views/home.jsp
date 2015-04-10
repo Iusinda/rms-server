@@ -9,6 +9,9 @@
 		text-align: center;
 	}
 	#menu{
+		background-color: #CCFFFF;
+		padding-top: 10px;
+		padding-bottom: 30px;
 	}
 	#add, #call{
 		width: 120px;

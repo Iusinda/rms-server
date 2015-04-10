@@ -98,13 +98,13 @@ public class TicketJDBCTemplate implements TicketDao {
 		try {
 			String SQL = "SELECT * FROM rms.Tickets WHERE RestaurantID = ? AND Type = ? "
 					+ "AND Validity = TRUE AND CallTime IS NULL ORDER BY Number LIMIT 1";
-			Ticket ticket = jdbcTemplateObject.queryForObject(SQL, new Object[] {
-					restaurantId, type }, new TicketMapper());
-	
+			Ticket ticket = jdbcTemplateObject.queryForObject(SQL,
+					new Object[] { restaurantId, type }, new TicketMapper());
+
 			SQL = "UPDATE rms.Tickets SET CallTime = NOW() "
 					+ "WHERE RestaurantID = ? AND Type = ? AND Number = ?";
-			if (jdbcTemplateObject.update(SQL, new Object[] { restaurantId, type,
-					ticket.getNumber() }) == 1)
+			if (jdbcTemplateObject.update(SQL, new Object[] { restaurantId,
+					type, ticket.getNumber() }) == 1)
 				return ticket;
 			else
 				return null;

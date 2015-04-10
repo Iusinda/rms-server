@@ -18,5 +18,5 @@ public interface CustomerDao {
 	public int update(Customer customer);
 
 	public int delete(Integer id);
-	
+
 }

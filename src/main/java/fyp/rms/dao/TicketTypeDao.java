@@ -2,13 +2,6 @@ package fyp.rms.dao;
 
 import java.util.List;
 
-
-
-/*
- private Integer restaurantId;
- private Character type;
- private Integer maxSize;
- * */
 import javax.sql.DataSource;
 
 import fyp.rms.entity.TicketType;
