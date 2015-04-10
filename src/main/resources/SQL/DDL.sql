@@ -5,6 +5,15 @@ DROP TABLE IF EXISTS rms.Restaurants;
 DROP TABLE IF EXISTS rms.Districts;
 DROP TABLE IF EXISTS rms.Areas;
 DROP TABLE IF EXISTS rms.Customers;
+DROP TABLE IF EXISTS rms.Holidays;
+
+CREATE TABLE rms.Holidays
+(
+Year INT,
+Month INT,
+Day INT,
+CONSTRAINT DateID PRIMARY KEY (Year, Month, Day)
+);
 
 CREATE TABLE rms.Customers
 (

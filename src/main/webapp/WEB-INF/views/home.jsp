@@ -9,7 +9,7 @@
 		text-align: center;
 	}
 	#menu{
-		background-color: #CCFFFF;
+		background-color: #D6ECF2;
 		padding-top: 10px;
 		padding-bottom: 30px;
 	}

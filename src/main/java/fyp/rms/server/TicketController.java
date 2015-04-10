@@ -35,18 +35,20 @@ public class TicketController {
 	}
 
 	private Integer getDayOfWeek(Calendar date) {
-//		ApplicationContext context = new ClassPathXmlApplicationContext(
-//				"jdbcConfig.xml");
-//		HolidayJDBCTemplate holidayRepository = (HolidayJDBCTemplate) context
-//				.getBean("HolidayJDBCTemplate");
-//		// For holiday: treat as Sunday
-//		if (holidayRepository.find(date) == 1)
-//			return 0;
-//		// For the day before holiday: treat as Friday
-//		date.add(Calendar.DATE, 1);
-//		if (holidayRepository.find(date) == 1)
-//			return 5;
-		return date.get(Calendar.DAY_OF_WEEK) - 1;
+		ApplicationContext context = new ClassPathXmlApplicationContext(
+				"jdbcConfig.xml");
+		HolidayJDBCTemplate holidayRepository = (HolidayJDBCTemplate) context
+				.getBean("HolidayJDBCTemplate");
+		// For holiday: treat as Sunday
+		if (holidayRepository.find(date) == 1)
+			return 0;
+		
+		// For the day before holiday (except Saturday and Sunday): treat as Friday
+		Integer dayOfWeek = date.get(Calendar.DAY_OF_WEEK) - 1;
+		date.add(Calendar.DATE, 1);
+		if (dayOfWeek < 5 && holidayRepository.find(date) == 1)
+			return 5;
+		return dayOfWeek;
 	}
 
 	private void performEstimation(Ticket ticket) {
@@ -166,10 +168,7 @@ public class TicketController {
 	@ResponseBody
 	public List<Ticket> list(@RequestParam Integer id,
 			@RequestParam Integer type) {
-		List<Ticket> tickets = repository().findByType(id, type);
-		logger.info("Return all " + tickets.size() + " valid "
-				+ (char) (type + 65) + " type tickets of Restaurant " + id);
-		return tickets;
+		return repository().findByType(id, type);
 	}
 
 	public boolean record(Integer id) {

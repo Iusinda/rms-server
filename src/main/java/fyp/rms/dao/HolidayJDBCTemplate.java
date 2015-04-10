@@ -18,10 +18,11 @@ public class HolidayJDBCTemplate implements HolidayDao {
 
 	@Override
 	public int find(Calendar date) {
-		String SQL = "SELECT COUNT(*) FROM rms.Holidays WHERE Month = ? AND Day = ?";
+		String SQL = "SELECT COUNT(*) FROM rms.Holidays WHERE Year = ? AND Month = ? AND Day = ?";
 		return jdbcTemplateObject.queryForInt(
 				SQL,
-				new Object[] { date.get(Calendar.MONTH),
+				new Object[] { date.get(Calendar.YEAR),
+						date.get(Calendar.MONTH) + 1,
 						date.get(Calendar.DAY_OF_MONTH) });
 	}
 }
