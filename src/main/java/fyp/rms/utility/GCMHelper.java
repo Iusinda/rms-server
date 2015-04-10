@@ -22,7 +22,7 @@ public class GCMHelper {
 		new Thread() {
 			public void run() {
 				try {
-					Sender sender = new Sender(regId);
+					Sender sender = new Sender("AIzaSyDFqKGeYuqbbj5Hs4fsEnDtXlpJyq0Qrgk");
 					Message message = new Message.Builder()
 							.collapseKey("message").timeToLive(3)
 							.delayWhileIdle(true)
