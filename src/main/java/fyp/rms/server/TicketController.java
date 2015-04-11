@@ -39,12 +39,12 @@ public class TicketController {
 				"jdbcConfig.xml");
 		HolidayJDBCTemplate holidayRepository = (HolidayJDBCTemplate) context
 				.getBean("HolidayJDBCTemplate");
-		// For holiday: treat as Sunday
-		if (holidayRepository.find(date) == 1)
-			return 0;
 		
-		// For the day before holiday (except Saturday and Sunday): treat as Friday
 		Integer dayOfWeek = date.get(Calendar.DAY_OF_WEEK) - 1;
+		// For holiday: treat as Sunday
+		if (dayOfWeek == 0 || holidayRepository.find(date) == 1)
+			return 0;
+		// For the day before holiday (except Saturday and Sunday): treat as Friday
 		date.add(Calendar.DATE, 1);
 		if (dayOfWeek < 5 && holidayRepository.find(date) == 1)
 			return 5;
