@@ -39,12 +39,13 @@ public class TicketController {
 				"jdbcConfig.xml");
 		HolidayJDBCTemplate holidayRepository = (HolidayJDBCTemplate) context
 				.getBean("HolidayJDBCTemplate");
-		
+
 		Integer dayOfWeek = date.get(Calendar.DAY_OF_WEEK) - 1;
 		// For holiday: treat as Sunday
 		if (dayOfWeek == 0 || holidayRepository.find(date) == 1)
 			return 0;
-		// For the day before holiday (except Saturday and Sunday): treat as Friday
+		// For the day before holiday (except Saturday and Sunday): treat as
+		// Friday
 		date.add(Calendar.DATE, 1);
 		if (dayOfWeek < 5 && holidayRepository.find(date) == 1)
 			return 5;
@@ -71,6 +72,13 @@ public class TicketController {
 		Integer timeLeft = (int) (ticket.getGetTime().getTime() / 60000
 				+ ticket.getDuration() - time.getTimeInMillis() / 60000);
 		ticket.setDuration(timeLeft);
+	}
+
+	@RequestMapping(value = "/test")
+	@ResponseBody
+	public Integer test(@RequestParam Integer type, @RequestParam Integer day,
+			@RequestParam Integer time, @RequestParam Integer position) {
+		return (new MLHelper()).calculate(2, type, day, time, position);
 	}
 
 	@RequestMapping(value = "/ticket", params = "customerId")

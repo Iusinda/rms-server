@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
+
 public class HolidayJDBCTemplate implements HolidayDao {
 	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplateObject;
@@ -14,6 +15,13 @@ public class HolidayJDBCTemplate implements HolidayDao {
 	public void setDataSource(DataSource ds) {
 		this.dataSource = ds;
 		this.jdbcTemplateObject = new JdbcTemplate(dataSource);
+	}
+
+	@Override
+	public int create(Integer year, Integer month, Integer day) {
+		String SQL = "INSERT INTO rms.Holidays VALUES (?,?,?)";
+		return jdbcTemplateObject
+				.update(SQL, new Object[] { year, month, day });
 	}
 
 	@Override
