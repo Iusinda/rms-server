@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import fyp.rms.dao.RestaurantJDBCTemplate;
 import fyp.rms.entity.Restaurant;
+import fyp.rms.utility.MLHelper;
 
 @Controller
 public class RestaurantController {
@@ -73,12 +74,13 @@ public class RestaurantController {
 			@RequestParam Integer id,
 			@RequestParam boolean status,
 			@RequestParam(required = false, defaultValue = "false") boolean reset) {
-		if (reset == true && !(new TicketController()).record(id))
+		if (reset == true
+				&& (!(new TicketController()).record(id) || !(new MLHelper())
+						.update(id)))
 			return false;
-
 		boolean result = (repository().updateAvailability(id, status) == 1);
-		logger.info("Modify availability to " + status
-				+ " for Restaurant " + id + ": " + result);
+		logger.info("Modify availability to " + status + " for Restaurant "
+				+ id + ": " + result);
 		return result;
 	}
 
@@ -96,8 +98,7 @@ public class RestaurantController {
 	@ResponseBody
 	public List<Restaurant> listAll() {
 		List<Restaurant> restaurants = repository().findAll();
-		logger.info("Return all {} available restaurant(s)",
-				restaurants.size());
+		logger.info("Return all {} available restaurant(s)", restaurants.size());
 		return restaurants;
 	}
 
